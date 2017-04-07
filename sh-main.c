@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <string.h>
 #define BUFSIZE 1024
 #define DELIM " \t\n"
 void prompt_user();
@@ -23,19 +24,21 @@ int main(int argc, char **argv, char **envp)
 
 void prompt_user()
 {
-	char *line;
-	size_t n = (size_t )BUFSIZE;
+	char *line = NULL;
+	size_t n;
 	char **arg;
+	size_t retval;
 	ssize_t linesize;
 	int stat;
-	do
+	while (1)
 	{
-		printf("$");
 		//get the line
-		line = _getline();
+		printf("$ ");
+		/*line = _getline();*/
+		retval = getline(&line, &n, stdin);
 		arg = split_line(line);
-		stat = execute_arg(arg);
-	}while (stat);
+		execute_arg(arg);
+	}
 
 }
 char **split_line(char *line)
@@ -65,7 +68,7 @@ char **split_line(char *line)
 			}
 		}
 		/*Move onto the next token*/
-		token = strtok(NULL, delim);;
+		token = strtok(NULL, delim);
 	}
 	/*making the last one null*/
 	tokens[i] = NULL;
@@ -77,7 +80,6 @@ int execute_arg(char **arg)
 	pid_t child_pid, wpid;
 	int status;
 	pid_t tpid;
-
 	child_pid = fork();
 	if (child_pid == -1)
 	{
@@ -87,23 +89,35 @@ int execute_arg(char **arg)
 	if (child_pid == 0)
 	{
 		/*child process was created successfully*/
-		execvp(arg[0], arg);
-		/*have something to handle error*/
-		printf("known command\n");
-//		exit(0);
+		if (execvp(arg[0], arg) == -1)
+		{
+			perror("hsh error:");
+		}
+		exit(EXIT_FAILURE);
+
 	}
 	else
 	{
-		/*this portion is runned by parent*/
-/*
+		wait(&status);
+		/*
 		do
 		{
-			tpid = wait(&status);
-			if (tpid != child_pid)
-				process_terminated(tpid);
-		}while(tpid != child_pid);
-//		return (status);
-*/
+			wpid = waitpid(child_pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		*/
+		/**
+		 *WIFEXITED - This macro returns a nonzero
+		 * value if the child process terminated normally
+		 * with exit or _exit.
+		 */
+
+		/**
+		 * WIFSIGNALED
+		 * This macro returns a nonzero value if the child process
+		 * terminated because it received a signal that was not handled.
+		 *See Signal Handling.
+		 */
+
 	}
 	return 1;
 }
