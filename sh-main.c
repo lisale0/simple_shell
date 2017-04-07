@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-
+#include <sys/wait.h>
 #define BUFSIZE 1024
 #define DELIM " \t\n"
 void prompt_user();
@@ -31,10 +31,10 @@ void prompt_user()
 	do
 	{
 		printf("$");
+		//get the line
 		line = _getline();
 		arg = split_line(line);
 		stat = execute_arg(arg);
-		wait();
 	}while (stat);
 
 }
@@ -74,17 +74,36 @@ char **split_line(char *line)
 }
 int execute_arg(char **arg)
 {
-	pid_t pid, wpid;
+	pid_t child_pid, wpid;
 	int status;
+	pid_t tpid;
 
-	pid = fork();
-	wait();
-	if (pid == 0)
+	child_pid = fork();
+	if (child_pid == -1)
 	{
-		if (execvp(arg[0], arg) == -1)
-                {
-			exit(98);
-                }
+		perror("Error:");
+		return (1);
 	}
-	return (1);
+	if (child_pid == 0)
+	{
+		/*child process was created successfully*/
+		execvp(arg[0], arg);
+		/*have something to handle error*/
+		printf("known command\n");
+//		exit(0);
+	}
+	else
+	{
+		/*this portion is runned by parent*/
+/*
+		do
+		{
+			tpid = wait(&status);
+			if (tpid != child_pid)
+				process_terminated(tpid);
+		}while(tpid != child_pid);
+//		return (status);
+*/
+	}
+	return 1;
 }
