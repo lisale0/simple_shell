@@ -13,11 +13,8 @@
 void prompt_user();
 char **split_line(char *line);
 int execute_arg(char **arg);
-int main(int argc, char **argv, char **envp)
+int main()
 {
-	size_t i;
-	int status;
-
 	prompt_user();
 	return (0);
 }
@@ -27,15 +24,12 @@ void prompt_user()
 	char *line = NULL;
 	size_t n;
 	char **arg;
-	size_t retval;
-	ssize_t linesize;
-	int stat;
+	/**size_t retval;*/
 	while (1)
 	{
-		//get the line
+		/**get the line*/
 		printf("$ ");
-		/*line = _getline();*/
-		retval = getline(&line, &n, stdin);
+        	getline(&line, &n, stdin);
 		arg = split_line(line);
 		execute_arg(arg);
 	}
@@ -56,7 +50,7 @@ char **split_line(char *line)
 	while (token != NULL)
 	{
 		tokens[i] = token;
-		//printf("%d %s\n", i, tokens[i]);
+		/**printf("%d %s\n", i, tokens[i]);*/
 		i++;
 		if (i >= size)
 		{
@@ -67,19 +61,18 @@ char **split_line(char *line)
 				printf("failed to allocate meory for tokens\n");
 			}
 		}
-		/*Move onto the next token*/
+		/**Move onto the next token*/
 		token = strtok(NULL, delim);
 	}
-	/*making the last one null*/
+	/**making the last one null*/
 	tokens[i] = NULL;
-	//printf("%s", tokens[i]);
+	/*(printf("%s", tokens[i]);*/
 	return (tokens);
 }
 int execute_arg(char **arg)
 {
-	pid_t child_pid, wpid;
+	pid_t child_pid;
 	int status;
-	pid_t tpid;
 	child_pid = fork();
 	if (child_pid == -1)
 	{
@@ -88,7 +81,7 @@ int execute_arg(char **arg)
 	}
 	if (child_pid == 0)
 	{
-		/*child process was created successfully*/
+		/**child process was created successfully*/
 		if (execvp(arg[0], arg) == -1)
 		{
 			perror("hsh error:");
