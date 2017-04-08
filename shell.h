@@ -1,6 +1,5 @@
 #ifndef SHELL_H
 #define SHELL_H
-
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +23,10 @@ typedef struct env
         char *value;
         struct env *next;
 }env_t;
+/**global*/
+extern env_t *envlist;
+env_t *envlist = NULL;
+
 typedef struct alias
 {
         char *key;
@@ -31,9 +34,15 @@ typedef struct alias
         struct alias *next;
 }alias_t;
 
+typedef struct structlist
+{
+	env_t *envlist;
+}structlist_t;
+
 /**
  * primary functions in main file
  */
+void set_envlist(env_t **envlist);
 void prompt_user();
 char **split_line(char *line);
 int execute_arg(char **arg);
@@ -48,10 +57,9 @@ int _unsetenv(const char *name);
 /**
  * functions for environ data structure
  */
-void add_nodeenv(env_t **envlist, char *env);
 size_t print_listenv(const env_t *h);
 void add_nodeenv_end(env_t **head, char *env);
 
 char *_getline();
-
+void printtest();
 #endif

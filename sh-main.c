@@ -5,6 +5,14 @@ extern char **environ;
 int main( __attribute__((unused)) int argc,
 __attribute__((unused))char **argv, __attribute__((unused)) char **env)
 {
+        char **ep;
+
+	env_t *envlist = NULL;
+
+        for (ep = environ; *ep != NULL; ep++)
+        {
+                add_nodeenv_end(&envlist, *ep);
+        }
 	prompt_user();
 	return (0);
 }
@@ -69,7 +77,7 @@ int execute_arg(char **arg)
 	{
 		if (chdir(arg[1]) != 0)
 		{
-			perror("Error: ");
+			perror("hsh error");
 		}
 	}
 	else
@@ -77,14 +85,14 @@ int execute_arg(char **arg)
 		child_pid = fork();
 		if (child_pid == -1)
 		{
-			perror("Error:");
+			perror("hsh error");
 			return (1);
 		}
 		if (child_pid == 0)
 		{
 			if (execvp(arg[0], arg) == -1)
 			{
-				perror("hsh error:");
+				perror("hsh error");
 			}
 			exit(EXIT_FAILURE);
 

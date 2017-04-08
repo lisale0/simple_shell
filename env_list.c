@@ -1,5 +1,5 @@
 #include "shell.h"
-void add_nodeenv(env_t **envlist, char *env)
+void add_nodeenv_end(env_t **envlist, char *env)
 {
         env_t *newNode;
         char *key, *value;
