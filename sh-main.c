@@ -1,20 +1,9 @@
 #include "shell.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <string.h>
-#include <errno.h>
-#define BUFSIZE 1024
-#define DELIM " \t\n"
-void prompt_user();
-char **split_line(char *line);
-int execute_arg(char **arg);
-int main()
+
+extern char **environ;
+
+int main( __attribute__((unused)) int argc,
+__attribute__((unused))char **argv, __attribute__((unused)) char **env)
 {
 	prompt_user();
 	return (0);
