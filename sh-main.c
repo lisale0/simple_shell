@@ -8,6 +8,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <errno.h>
 #define BUFSIZE 1024
 #define DELIM " \t\n"
 void prompt_user();
@@ -73,44 +74,36 @@ int execute_arg(char **arg)
 {
 	pid_t child_pid;
 	int status;
-	child_pid = fork();
-	if (child_pid == -1)
-	{
-		perror("Error:");
-		return (1);
-	}
-	if (child_pid == 0)
-	{
-		/**child process was created successfully*/
-		if (execvp(arg[0], arg) == -1)
-		{
-			perror("hsh error:");
-		}
-		exit(EXIT_FAILURE);
 
+
+	if (strcmp(arg[0], "cd") == 0)
+	{
+		if (chdir(arg[1]) != 0)
+		{
+			perror("Error: ");
+		}
 	}
 	else
 	{
-		wait(&status);
-		/*
-		do
+		child_pid = fork();
+		if (child_pid == -1)
 		{
-			wpid = waitpid(child_pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-		*/
-		/**
-		 *WIFEXITED - This macro returns a nonzero
-		 * value if the child process terminated normally
-		 * with exit or _exit.
-		 */
+			perror("Error:");
+			return (1);
+		}
+		if (child_pid == 0)
+		{
+			if (execvp(arg[0], arg) == -1)
+			{
+				perror("hsh error:");
+			}
+			exit(EXIT_FAILURE);
 
-		/**
-		 * WIFSIGNALED
-		 * This macro returns a nonzero value if the child process
-		 * terminated because it received a signal that was not handled.
-		 *See Signal Handling.
-		 */
-
+		}
+		else
+		{
+			wait(&status);
+		}
 	}
 	return 1;
 }
