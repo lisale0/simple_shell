@@ -24,8 +24,6 @@ typedef struct env
         struct env *next;
 }env_t;
 /**global*/
-extern env_t *envlist;
-env_t *envlist = NULL;
 
 typedef struct alias
 {
