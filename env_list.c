@@ -1,13 +1,14 @@
 #include "shell.h"
-void add_nodeenv_end(env_t **envlist, char *env)
+void add_nodeenv_end(structlist_t **structlist, char *env)
 {
         env_t *newNode;
         char *key, *value;
         env_t *temp;
 
-	if (envlist == NULL || env == NULL)
+	if ( env == NULL)
+	{
                 return;
-
+	}
         newNode = malloc(sizeof(env_t));
         if (newNode == NULL)
                 return;
@@ -17,13 +18,13 @@ void add_nodeenv_end(env_t **envlist, char *env)
         newNode->key = strdup(key);
 	newNode->value = strdup(value);
 
-        if (*envlist == NULL)
+        if ((*structlist)->envlist == NULL)
 	{
-                *envlist = newNode;
+                (*structlist)->envlist = newNode;
                 newNode->next = NULL;
                 return;
 	}
-        temp = *envlist;
+        temp = (*structlist)->envlist;
 	while (temp->next != NULL)
         {
                 temp = temp->next;
@@ -33,16 +34,18 @@ void add_nodeenv_end(env_t **envlist, char *env)
 	return;
 }
 
-size_t print_listenv(const env_t *h)
+size_t print_listenv(const structlist_t *structlist)
 {
         int i;
-
+	env_t *temp;
         i = 0;
-	while (h != NULL)
+
+	temp = structlist->envlist;
+	while (temp != NULL)
         {
-                printf("Key: %s\n", h->key);
-                printf("Value: %s\n", h->value);
-                h = h->next;
+                printf("Key: %s = ", temp->key);
+                printf("Value: %s\n", temp->value);
+                temp = temp->next;
                 i++;
 	}
         return (i);

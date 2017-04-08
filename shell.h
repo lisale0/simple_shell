@@ -55,8 +55,8 @@ int _unsetenv(const char *name);
 /**
  * functions for environ data structure
  */
-size_t print_listenv(const env_t *h);
-void add_nodeenv_end(env_t **head, char *env);
+size_t print_listenv(const structlist_t *structlist);
+void add_nodeenv_end(structlist_t **structlist, char *env);
 
 char *_getline();
 void printtest();

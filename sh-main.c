@@ -2,17 +2,18 @@
 
 extern char **environ;
 
-int main( __attribute__((unused)) int argc,
-__attribute__((unused))char **argv, __attribute__((unused)) char **env)
+int main()
 {
+	/*adding structlist*/
+	structlist_t *structlist;
         char **ep;
-
-	env_t *envlist = NULL;
+	structlist->envlist = NULL;
 
         for (ep = environ; *ep != NULL; ep++)
         {
-                add_nodeenv_end(&envlist, *ep);
+                add_nodeenv_end(&structlist, *ep);
         }
+	print_listenv(structlist);
 	prompt_user();
 	return (0);
 }
