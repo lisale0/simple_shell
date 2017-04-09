@@ -12,7 +12,7 @@
 #include <errno.h>
 #define BUFSIZE 1024
 #define DELIM " \t\n"
-
+extern char **environ;
 /**
  * env - data structure, linked list for environ
  *
@@ -23,14 +23,6 @@ typedef struct env
         char *value;
         struct env *next;
 }env_t;
-/**global*/
-
-typedef struct alias
-{
-        char *key;
-        char *value;
-        struct alias *next;
-}alias_t;
 
 typedef struct structlist
 {
@@ -64,6 +56,9 @@ int _strlen(const char *s);
 size_t print_listenv(const structlist_t *structlist);
 void add_nodeenv_end(structlist_t **structlist, char *env);
 
+/**
+ * other functions
+ */
 char *_getline();
 void printtest();
 #endif

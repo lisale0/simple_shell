@@ -32,7 +32,7 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 {
 	env_t *temp;
 	int found = 0;
-	char *env;
+	/**char *env;*/
 
 	temp = (*structlist)->envlist;
         while(temp != NULL)

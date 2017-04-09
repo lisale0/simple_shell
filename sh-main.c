@@ -1,7 +1,10 @@
 #include "shell.h"
 
-extern char **environ;
-
+/**
+ * main - main function
+ *
+ * Return: Always 0 for success
+ */
 int main()
 {
 	/*adding structlist*/
@@ -19,17 +22,23 @@ int main()
 	 * having issues with this call
 	 */
 	/**_setenv(&structlist, "HELLLO", "WOOORRRLLDDD"); */
-	print_listenv(structlist);
+	/**
+	 * print_listenv is used to test is nodes are getting added correctly
+	 */
+	/**print_listenv(structlist);*/
 	prompt_user();
 	return (0);
 }
 
+/**
+ * prompt_user - prompts the user for input
+ * Return: none
+ */
 void prompt_user()
 {
 	char *line = NULL;
 	size_t n;
 	char **arg;
-	/**size_t retval;*/
 	while (1)
 	{
 		/**get the line*/
@@ -71,6 +80,13 @@ char **split_line(char *line)
 	tokens[i] = NULL;
 	return (tokens);
 }
+
+/**
+ * execute_arg - execute the arguments passed in
+ * @arg: arguments passed in
+ *
+ * Return: 1 if passed, otherwise -1 if failed
+ */
 int execute_arg(char **arg)
 {
 	pid_t child_pid;
@@ -90,7 +106,7 @@ int execute_arg(char **arg)
 		if (child_pid == -1)
 		{
 			perror("hsh error");
-			return (1);
+			return (-1);
 		}
 		if (child_pid == 0)
 		{
@@ -99,7 +115,6 @@ int execute_arg(char **arg)
 				perror("hsh error");
 			}
 			exit(EXIT_FAILURE);
-
 		}
 		else
 		{
