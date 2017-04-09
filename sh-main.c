@@ -14,7 +14,6 @@ int main()
 
         for (ep = environ; *ep != NULL; ep++)
         {
-		printf("%s\n", *ep);
                 add_nodeenv_end(&structlist, *ep);
         }
 
