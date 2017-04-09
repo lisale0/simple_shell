@@ -35,7 +35,8 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 	/**char *env;*/
 
 	temp = (*structlist)->envlist;
-        while(temp != NULL)
+	/**Find is this key exists currently in the environment*/
+       while(temp != NULL)
         {
 		if (strcmp(temp->key, name) == 0)
 		{
