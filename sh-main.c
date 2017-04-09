@@ -25,6 +25,9 @@ int main()
 	 * print_listenv is used to test is nodes are getting added correctly
 	 */
 	/**print_listenv(structlist);*/
+
+	
+
 	prompt_user();
 	return (0);
 }
@@ -37,12 +40,33 @@ void prompt_user()
 {
 	char *line = NULL;
 	size_t n;
+	int retval;
 	char **arg;
+	struct stat sb;
+
+	if (fstat(STDIN_FILENO, &sb) == -1) {
+                perror("stat");
+                exit(EXIT_FAILURE);
+        }
 	while (1)
 	{
 		/**get the line*/
-		printf("$ ");
-        	getline(&line, &n, stdin);
+		switch (sb.st_mode & S_IFMT)
+		{
+			switch (sb.st_mode & S_IFMT)
+			case S_IFBLK:  printf("block device\n");            break;
+			case S_IFCHR:  printf("$ ");        break;
+			case S_IFDIR:  printf("directory\n");               break;
+			case S_IFIFO:  printf("FIFO/pipe\n");               break;
+			case S_IFLNK:  printf("symlink\n");                 break;
+			case S_IFREG:  printf("regular file\n");            break;
+			case S_IFSOCK: printf("socket\n");                  break;
+			default:       printf("unknown?\n");                break;
+		}
+        	retval = getline(&line, &n, stdin);
+		//printf("%d\n", retval);
+		if (retval < 0)
+			return;
 		arg = split_line(line);
 		execute_arg(arg);
 	}
