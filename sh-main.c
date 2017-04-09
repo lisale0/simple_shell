@@ -26,8 +26,6 @@ int main()
 	 */
 	/**print_listenv(structlist);*/
 
-	
-
 	prompt_user();
 	return (0);
 }
@@ -43,28 +41,32 @@ void prompt_user()
 	int retval;
 	char **arg;
 	struct stat sb;
+	int fifo = 0;
 
 	if (fstat(STDIN_FILENO, &sb) == -1) {
                 perror("stat");
                 exit(EXIT_FAILURE);
         }
+
+	/**
+	 *determine if this is a non-interactive mode*/
+	switch (sb.st_mode & S_IFMT)
+	{
+	case S_IFIFO:  fifo = 1;
+		break;
+	}
 	while (1)
 	{
-		/**get the line*/
-		switch (sb.st_mode & S_IFMT)
-		{
-			switch (sb.st_mode & S_IFMT)
-			case S_IFBLK:  printf("block device\n");            break;
-			case S_IFCHR:  printf("$ ");        break;
-			case S_IFDIR:  printf("directory\n");               break;
-			case S_IFIFO:  printf("FIFO/pipe\n");               break;
-			case S_IFLNK:  printf("symlink\n");                 break;
-			case S_IFREG:  printf("regular file\n");            break;
-			case S_IFSOCK: printf("socket\n");                  break;
-			default:       printf("unknown?\n");                break;
-		}
+		/**
+		 * get the line
+		 */
+		if (fifo == 0)
+			printf("$ ");
         	retval = getline(&line, &n, stdin);
-		//printf("%d\n", retval);
+		/**
+		 *if return value for getline fails return,
+		 * do not continue on with the function
+		 **/
 		if (retval < 0)
 			return;
 		arg = split_line(line);
@@ -72,6 +74,13 @@ void prompt_user()
 	}
 
 }
+
+/**
+ * split_line - splitting the input line into 2D array, set up for execvp
+ * @line: the line passed in for parsing
+ *
+ * Return: 2D array, array of strings
+ */
 char **split_line(char *line)
 {
 	int i = 0;
@@ -99,7 +108,9 @@ char **split_line(char *line)
 		}
 		token = strtok(NULL, delim);
 	}
- 	/**making the last one null*/
+ 	/**
+	 *making the last one null, set for execvp
+	 */
 	tokens[i] = NULL;
 	return (tokens);
 }
@@ -115,13 +126,10 @@ int execute_arg(char **arg)
 	pid_t child_pid;
 	int status;
 
-
 	if (strcmp(arg[0], "cd") == 0)
 	{
 		if (chdir(arg[1]) != 0)
-		{
 			perror("hsh error");
-		}
 	}
 	else
 	{
@@ -134,15 +142,11 @@ int execute_arg(char **arg)
 		if (child_pid == 0)
 		{
 			if (execvp(arg[0], arg) == -1)
-			{
 				perror("hsh error");
-			}
 			exit(EXIT_FAILURE);
 		}
 		else
-		{
 			wait(&status);
-		}
 	}
 	return 1;
 }
