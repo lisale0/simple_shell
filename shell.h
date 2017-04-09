@@ -48,9 +48,15 @@ int execute_arg(char **arg);
 /**
  * get, set, and unset env
  */
-char *_getenv(const char *name);
-int _setenv(const char *name, const char *value, int overwrite);
+char *_getenv(const structlist_t *structlist, const char *name);
+int _setenv(structlist_t **structlist, const char *name, const char *value);
 int _unsetenv(const char *name);
+
+/**
+ * string helper functions
+ */
+char *_strcat(char *dest, const char *src);
+int _strlen(const char *s);
 
 /**
  * functions for environ data structure

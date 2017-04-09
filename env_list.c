@@ -1,4 +1,12 @@
 #include "shell.h"
+/**
+ * add_nodeenv_end - adding an environment variable to the end of the
+ * linked list
+ * @structlist: struct pointer to struct env_t
+ * @env: contains environment information to break down
+ *
+ * Return:none
+ */
 void add_nodeenv_end(structlist_t **structlist, char *env)
 {
         env_t *newNode;
@@ -12,9 +20,11 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
         newNode = malloc(sizeof(env_t));
         if (newNode == NULL)
                 return;
-
 	key = strtok(env, "=");
-        value = strtok(NULL, "=");
+	if (strcmp(key, "LS_COLORS") == 0)
+		value = strtok(NULL, "");
+	else
+		value = strtok(NULL, "=");
         newNode->key = strdup(key);
 	newNode->value = strdup(value);
 
@@ -33,7 +43,12 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
 	newNode->next = NULL;
 	return;
 }
-
+/**
+ * print_listenv - function to print the linked list of environment variables
+ * @structlist: struct pointer to struct env_t
+ *
+ * Return:size_t, number of nodes in the list
+ */
 size_t print_listenv(const structlist_t *structlist)
 {
         int i;
@@ -43,7 +58,7 @@ size_t print_listenv(const structlist_t *structlist)
 	temp = structlist->envlist;
 	while (temp != NULL)
         {
-                printf("Key: %s = ", temp->key);
+                printf("Key: %s\n", temp->key);
                 printf("Value: %s\n", temp->value);
                 temp = temp->next;
                 i++;

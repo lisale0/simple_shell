@@ -11,8 +11,14 @@ int main()
 
         for (ep = environ; *ep != NULL; ep++)
         {
+		printf("%s\n", *ep);
                 add_nodeenv_end(&structlist, *ep);
         }
+
+	/**
+	 * having issues with this call
+	 */
+	/**_setenv(&structlist, "HELLLO", "WOOORRRLLDDD"); */
 	print_listenv(structlist);
 	prompt_user();
 	return (0);
@@ -49,7 +55,6 @@ char **split_line(char *line)
 	while (token != NULL)
 	{
 		tokens[i] = token;
-		/**printf("%d %s\n", i, tokens[i]);*/
 		i++;
 		if (i >= size)
 		{
@@ -60,12 +65,10 @@ char **split_line(char *line)
 				printf("failed to allocate meory for tokens\n");
 			}
 		}
-		/**Move onto the next token*/
 		token = strtok(NULL, delim);
 	}
-	/**making the last one null*/
+ 	/**making the last one null*/
 	tokens[i] = NULL;
-	/*(printf("%s", tokens[i]);*/
 	return (tokens);
 }
 int execute_arg(char **arg)
