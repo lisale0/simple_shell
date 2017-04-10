@@ -1,4 +1,5 @@
 #include "shell.h"
+void _setenvtest();
 /**
  * _getenv - get an environment variable
  *
@@ -13,9 +14,7 @@ char *_getenv(const structlist_t *structlist, const char *name)
 	while(temp != NULL)
 	{
 		if (strcmp(temp->key, name) == 0)
-		{
 			return (temp->value);
-		}
 		temp = temp->next;
 	}
 	return (NULL);
@@ -31,9 +30,14 @@ char *_getenv(const structlist_t *structlist, const char *name)
 int _setenv(structlist_t **structlist, const char *name, const char *value)
 {
 	env_t *temp;
-	int found = 0;
-	/**char *env;*/
+	int found = 0, len;
+	char *env;
 
+	len = _strlen(name) + _strlen(value) + 3;
+	printf("%d", len);
+	env = malloc(sizeof(char) * len);
+	if (env == NULL)
+		return (-1);
 	temp = (*structlist)->envlist;
 	/**Find is this key exists currently in the environment*/
        while(temp != NULL)
@@ -52,21 +56,38 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 	}
 	else
 	{
-		/**
-		env = _strcat(env, name);
+		env = strcpy(env, name);
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
-		*/
+                add_nodeenv_end(structlist, env);
+		free(env);
+	}
+	return (-1);
+}
+/**
+ * _unsetenv - removing an environment variables, specified by name
+ * @name: the key to delete
+ *
+ * Return: 1 if successful delete, -1 if unsuccessful
+ */
+int _unsetenv(structlist_t **structlist, const char *name)
+{
+	env_t *deleteNode, *temp;
 
-		/**
-		 * Problem: seg faulting here with add_nodeenv_end
-		 * outside of this add_nodeenv_end works
-		 */
-		/*
-		env ="HELLO=World";
-		printf("%s", env);
-		add_nodeenv_end(structlist, env);
-		*/
+	if ((*structlist)->envlist == NULL)
+		return (-1);
+	temp = (*structlist)->envlist;
+	while (temp != NULL)
+	{
+		if (strcmp((temp->next)->key, name) == 0)
+		{
+			printf("found key: %s name: %s\n", temp->key, name);
+			deleteNode = temp->next;
+			temp->next = deleteNode->next;
+			free(deleteNode);
+			return (1);
+		}
+		temp = temp->next;
 	}
 	return (-1);
 }

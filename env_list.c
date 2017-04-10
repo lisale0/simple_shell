@@ -49,7 +49,7 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
  *
  * Return:size_t, number of nodes in the list
  */
-size_t print_listenv(const structlist_t *structlist)
+size_t print_listenv(structlist_t *structlist)
 {
         int i;
 	env_t *temp;
@@ -58,8 +58,8 @@ size_t print_listenv(const structlist_t *structlist)
 	temp = structlist->envlist;
 	while (temp != NULL)
         {
-                printf("Key: %s\n", temp->key);
-                printf("Value: %s\n", temp->value);
+                printf("%s", temp->key);
+                printf("=%s\n", temp->value);
                 temp = temp->next;
                 i++;
 	}

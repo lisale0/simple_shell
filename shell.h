@@ -14,8 +14,11 @@
 #define DELIM " \t\n"
 extern char **environ;
 /**
- * env - data structure, linked list for environ
+ * struct env - data structure, linked list for environ
+ * @key: the key of the environment variable
+ * @value: the values of the environment variable
  *
+ * Description: a linked list for environment variables
  */
 typedef struct env
 {
@@ -24,25 +27,42 @@ typedef struct env
         struct env *next;
 }env_t;
 
+/**
+ * struct structlist - struct containing pointers to other structs
+ * @envlist: linked list of the environment variables
+ *
+ * Description: packages all other structs into one struct for referencing
+ */
 typedef struct structlist
 {
 	env_t *envlist;
 }structlist_t;
 
 /**
+ * struct - structure for commands and functions
+ * @cmd: the input command by user
+ * @f: function pointer
+ */
+
+typedef struct cmds
+{
+	char *cmd;
+	void (*f)();
+}cmds_t;
+/**
  * primary functions in main file
  */
 void set_envlist(env_t **envlist);
-void prompt_user();
+void prompt_user(structlist_t **structlist);
 char **split_line(char *line);
-int execute_arg(char **arg);
+int execute_arg(structlist_t **structlist, char **arg);
 
 /**
  * get, set, and unset env
  */
 char *_getenv(const structlist_t *structlist, const char *name);
 int _setenv(structlist_t **structlist, const char *name, const char *value);
-int _unsetenv(const char *name);
+int _unsetenv(structlist_t **structlist, const char *name);
 
 /**
  * string helper functions
@@ -53,9 +73,16 @@ int _strlen(const char *s);
 /**
  * functions for environ data structure
  */
-size_t print_listenv(const structlist_t *structlist);
+size_t print_listenv(structlist_t *structlist);
 void add_nodeenv_end(structlist_t **structlist, char *env);
 
+/**
+ * cd
+ */
+
+void exec_cd(structlist_t **structlist, char *cmd, char **arg);
+void exec_env(structlist_t **structlist,
+	      __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
 /**
  * other functions
  */

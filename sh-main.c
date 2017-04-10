@@ -20,13 +20,15 @@ int main()
 	/**
 	 * having issues with this call
 	 */
-	/**_setenv(&structlist, "HELLLO", "WOOORRRLLDDD"); */
+	_unsetenv(&structlist, "PATH");
 	/**
 	 * print_listenv is used to test is nodes are getting added correctly
 	 */
+	print_listenv(structlist);
+	/**
+	   _setenvtest(&structlist);*/
 	/**print_listenv(structlist);*/
-
-	prompt_user();
+	prompt_user(&structlist);
 	return (0);
 }
 
@@ -34,7 +36,7 @@ int main()
  * prompt_user - prompts the user for input
  * Return: none
  */
-void prompt_user()
+void prompt_user(structlist_t **structlist)
 {
 	char *line = NULL;
 	size_t n;
@@ -70,7 +72,7 @@ void prompt_user()
 		if (retval < 0)
 			return;
 		arg = split_line(line);
-		execute_arg(arg);
+		execute_arg(structlist, arg);
 	}
 
 }
@@ -121,32 +123,37 @@ char **split_line(char *line)
  *
  * Return: 1 if passed, otherwise -1 if failed
  */
-int execute_arg(char **arg)
+int execute_arg(structlist_t **structlist, char **arg)
 {
 	pid_t child_pid;
-	int status;
+	int status, i;
 
-	if (strcmp(arg[0], "cd") == 0)
+	cmds_t cmd[] = {
+		{"cd", exec_cd},{"env", exec_env},{NULL, NULL}
+	};
+	child_pid = fork();
+	for (i = 0; cmd[i].cmd != NULL; i++)
 	{
-		if (chdir(arg[1]) != 0)
-			perror("hsh error");
-	}
-	else
-	{
-		child_pid = fork();
-		if (child_pid == -1)
+		if (strcmp(arg[0],cmd[i].cmd) == 0)
 		{
-			perror("hsh error");
-			return (-1);
-		}
-		if (child_pid == 0)
-		{
-			if (execvp(arg[0], arg) == -1)
-				perror("hsh error");
-			exit(EXIT_FAILURE);
+			cmd[i].f(structlist, arg[0], arg);
 		}
 		else
-			wait(&status);
+		{
+        		if (child_pid == -1)
+			{
+				perror("hsh error");
+				return (-1);
+			}
+			if (child_pid == 0)
+			{
+				if (execvp(arg[0], arg) == -1)
+					perror("hsh error");
+				exit(EXIT_FAILURE);
+			}
+			else
+				wait(&status);
+		}
 	}
 	return 1;
 }
