@@ -34,7 +34,6 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 	char *env;
 
 	len = _strlen(name) + _strlen(value) + 3;
-	printf("%d", len);
 	env = malloc(sizeof(char) * len);
 	if (env == NULL)
 		return (-1);
@@ -60,6 +59,7 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
                 add_nodeenv_end(structlist, env);
+		printf("entered");
 		free(env);
 	}
 	return (-1);

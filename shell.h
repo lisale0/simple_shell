@@ -1,5 +1,8 @@
 #ifndef SHELL_H
 #define SHELL_H
+/**
+ * all libraries below are included in all the c files for this project
+ */
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,6 +13,10 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <errno.h>
+
+/**
+ * 
+ */
 #define BUFSIZE 1024
 #define DELIM " \t\n"
 extern char **environ;
@@ -83,6 +90,7 @@ void add_nodeenv_end(structlist_t **structlist, char *env);
 void exec_cd(structlist_t **structlist, char *cmd, char **arg);
 void exec_env(structlist_t **structlist,
 	      __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
+void exec_setenv(structlist_t **structlist, char *cmd, char **arg);
 /**
  * other functions
  */

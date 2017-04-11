@@ -74,6 +74,7 @@ void prompt_user(structlist_t **structlist)
 		arg = split_line(line);
 		execute_arg(structlist, arg);
 	}
+	free(line);
 
 }
 
@@ -129,7 +130,8 @@ int execute_arg(structlist_t **structlist, char **arg)
 	int status, i;
 
 	cmds_t cmd[] = {
-		{"cd", exec_cd},{"env", exec_env},{NULL, NULL}
+		{"cd", exec_cd},{"env", exec_env},{"setenv", exec_setenv},
+		{NULL, NULL}
 	};
 	child_pid = fork();
 	for (i = 0; cmd[i].cmd != NULL; i++)
@@ -147,7 +149,7 @@ int execute_arg(structlist_t **structlist, char **arg)
 			}
 			if (child_pid == 0)
 			{
-				if (execvp(arg[0], arg) == -1)
+				if (execve(arg[0], arg) == -1)
 					perror("hsh error");
 				exit(EXIT_FAILURE);
 			}
