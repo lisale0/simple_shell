@@ -8,13 +8,13 @@
 int main()
 {
 	/*adding structlist*/
-	structlist_t *structlist;
         char **ep;
-	structlist->envlist = NULL;
+	env_t *envlist = NULL;
 
+	/*envlist = NULL;*/
         for (ep = environ; *ep != NULL; ep++)
         {
-                add_nodeenv_end(&structlist, *ep);
+                add_nodeenv_end(&envlist, *ep);
         }
 	//printf("%d", (structlist->envlist)->count);
 	/**
@@ -27,24 +27,22 @@ int main()
 	//print_listenv(structlist);
 	/**
 	   _setenvtest(&structlist);*/
-	/**print_listenv(structlist);*/
-	prompt_user(&structlist);
-	freeenvlist(&structlist);
+
+	prompt_user(&envlist);
+	/*this frees what I want*/
+	freeenvlist(&envlist);
+	//free(structlist);
 	return (0);
 }
 
-/**
- * prompt_user - prompts the user for input
- * Return: none
- */
-void prompt_user(structlist_t **structlist)
+void prompt_user(env_t **envlist)
 {
 	char *line = NULL;
 	size_t n;
-	int retval;
+	int retval = 1;
 	char **arg;
 	struct stat sb;
-	int fifo = 0;
+	int pipe = 0;
 
 	if (fstat(STDIN_FILENO, &sb) == -1) {
                 perror("stat");
@@ -53,30 +51,35 @@ void prompt_user(structlist_t **structlist)
 
 	/**
 	 *determine if this is a non-interactive mode*/
+
 	switch (sb.st_mode & S_IFMT)
 	{
-	case S_IFIFO:  fifo = 1;
+	case S_IFIFO:  pipe = 1;
 		break;
 	}
-	while (1)
+	if (pipe == 0)
+		printf("$ ");
+	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
 		/**
 		 * get the line
 		 */
-		if (fifo == 0)
-			printf("$ ");
-        	retval = getline(&line, &n, stdin);
 		/**
 		 *if return value for getline fails return,
 		 * do not continue on with the function
 		 **/
 		if (retval < 0)
-			return;
+			break;
 		arg = split_line(line);
-		execute_arg(structlist, arg);
+		execute_arg(envlist, arg);
+
+		if (arg != NULL)
+			freearg(arg);
+
+		if (pipe == 0)
+			printf("$ ");
 	}
 	free(line);
-	freearg(&arg);
 }
 
 /**
@@ -85,17 +88,23 @@ void prompt_user(structlist_t **structlist)
  *
  * Return: 2D array, array of strings
  */
+
+
 char **split_line(char *line)
 {
 	int i = 0;
 	int size = TOKSIZE;
 	char **tokens;
-	char *token;
-	char delim[3] = " \t\n";
+	char *token = "";
+	char *delim = " \t\n";
 
 	tokens = malloc(sizeof(char*) * size);
+
 	if (tokens == NULL)
+	{
 		printf("failed to allocate meory for tokens\n");
+		return NULL;
+	}
 	token = strtok(line, delim);
 	while (token != NULL)
 	{
@@ -104,7 +113,7 @@ char **split_line(char *line)
 		if (i >= size)
 		{
 			size += BUFSIZE;
-			tokens = realloc(tokens, sizeof(char*) * size);
+			tokens = realloc(tokens, sizeof(char*) * 2);
 			if (tokens == NULL)
 			{
 				printf("failed to allocate meory for tokens\n");
@@ -125,7 +134,8 @@ char **split_line(char *line)
  *
  * Return: 1 if passed, otherwise -1 if failed
  */
-int execute_arg(structlist_t **structlist, char **arg)
+
+int execute_arg(env_t **envlist, char **arg)
 {
 	pid_t child_pid;
 	int status, i;
@@ -139,7 +149,7 @@ int execute_arg(structlist_t **structlist, char **arg)
 	{
 		if (strcmp(arg[0],cmd[i].cmd) == 0)
 		{
-			cmd[i].f(structlist, arg[0], arg);
+			cmd[i].f(envlist, arg[0], arg);
 		}
 		else
 		{

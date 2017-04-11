@@ -7,13 +7,13 @@
  *
  * Return:none
  */
-void add_nodeenv_end(structlist_t **structlist, char *env)
+void add_nodeenv_end(env_t **envlist, char *env)
 {
         env_t *newNode;
         char *key, *value;
         env_t *temp;
 
-	if ( env == NULL)
+	if (env == NULL)
 	{
                 return;
 	}
@@ -31,21 +31,21 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
         newNode->key = strdup(key);
 	newNode->value = strdup(value);
 
-        if ((*structlist)->envlist == NULL)
+        if (*envlist == NULL)
 	{
-                (*structlist)->envlist = newNode;
+                *envlist = newNode;
                 newNode->next = NULL;
-		(*structlist)->envlist->count += 1;
+		(*envlist)->count += 1;
                 return;
 	}
-        temp = (*structlist)->envlist;
+        temp = *envlist;
 	while (temp->next != NULL)
         {
                 temp = temp->next;
 	}
         temp->next = newNode;
 	newNode->next = NULL;
-	(*structlist)->envlist->count += 1;
+	(*envlist)->count += 1;
 	return;
 }
 /**
@@ -54,13 +54,13 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
  *
  * Return:size_t, number of nodes in the list
  */
-size_t print_listenv(structlist_t *structlist)
+size_t print_listenv(env_t *envlist)
 {
         int i;
 	env_t *temp;
         i = 0;
 
-	temp = structlist->envlist;
+	temp = envlist;
 	while (temp != NULL)
         {
                 printf("%s", temp->key);

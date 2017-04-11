@@ -6,11 +6,11 @@ void _setenvtest();
  * Return: returns a pointer to the value in the  environment,
  * or NULL if there is no match.
  */
-char *_getenv(const structlist_t *structlist, const char *name)
+char *_getenv(env_t *envlist, const char *name)
 {
 	env_t *temp;
 
-	temp = structlist->envlist;
+	temp = envlist;
 	while(temp != NULL)
 	{
 		if (strcmp(temp->key, name) == 0)
@@ -27,7 +27,7 @@ char *_getenv(const structlist_t *structlist, const char *name)
  *
  * Return: int, 1 if success, -1 if failed
  */
-int _setenv(structlist_t **structlist, const char *name, const char *value)
+int _setenv(env_t **envlist, const char *name, const char *value)
 {
 	env_t *temp;
 	int found = 0, len;
@@ -37,7 +37,7 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 	env = malloc(sizeof(char) * len);
 	if (env == NULL)
 		return (-1);
-	temp = (*structlist)->envlist;
+	temp = *envlist;
 	/**Find is this key exists currently in the environment*/
        while(temp != NULL)
         {
@@ -58,7 +58,7 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
 		env = strcpy(env, name);
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
-                add_nodeenv_end(structlist, env);
+                add_nodeenv_end(envlist, env);
 		printf("entered");
 		free(env);
 	}
@@ -70,13 +70,13 @@ int _setenv(structlist_t **structlist, const char *name, const char *value)
  *
  * Return: 1 if successful delete, -1 if unsuccessful
  */
-int _unsetenv(structlist_t **structlist, const char *name)
+int _unsetenv(env_t **envlist, const char *name)
 {
 	env_t *deleteNode, *temp;
 
-	if ((*structlist)->envlist == NULL)
+	if (*envlist == NULL)
 		return (-1);
-	temp = (*structlist)->envlist;
+	temp = *envlist;
 	while (temp != NULL)
 	{
 		if (strcmp((temp->next)->key, name) == 0)

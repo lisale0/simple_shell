@@ -1,26 +1,21 @@
 #include "shell.h"
 
-void freeenvlist(structlist_t **structlist)
+void freeenvlist(env_t **envlist)
 {
 	env_t *temp;
 
-        while ((*structlist)->envlist != NULL)
+        while (*envlist != NULL)
 	{
-		temp = (*structlist)->envlist;
-		(*structlist)->envlist = temp->next;
+		temp = *envlist;
+		*envlist = temp->next;
 		free(temp->key);
 		free(temp->value);
 		free(temp);
 	}
+	free(*envlist);
 }
 
-void freearg(char ***arg)
+void freearg(char **arg)
 {
-	int i = 0;
-	while(*arg != NULL)
-	{
-		free(arg[i][0]);
-		i++;
-	}
-	free(arg[0]);
+	free(arg);
 }

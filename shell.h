@@ -36,12 +36,7 @@ typedef struct env
         struct env *next;
 }env_t;
 
-/**
- * struct structlist - struct containing pointers to other structs
- * @envlist: linked list of the environment variables
- *
- * Description: packages all other structs into one struct for referencing
- */
+
 typedef struct structlist
 {
 	env_t *envlist;
@@ -62,16 +57,16 @@ typedef struct cmds
  * primary functions in main file
  */
 void set_envlist(env_t **envlist);
-void prompt_user(structlist_t **structlist);
+void prompt_user(env_t **envlist);
 char **split_line(char *line);
-int execute_arg(structlist_t **structlist, char **arg);
+int execute_arg(env_t **envlist, char **arg);
 
 /**
  * get, set, and unset env
  */
-char *_getenv(const structlist_t *structlist, const char *name);
-int _setenv(structlist_t **structlist, const char *name, const char *value);
-int _unsetenv(structlist_t **structlist, const char *name);
+char *_getenv(env_t *envlist, const char *name);
+int _setenv(env_t **envlist, const char *name, const char *value);
+int _unsetenv(env_t **envlist, const char *name);
 
 /**
  * string helper functions
@@ -82,23 +77,23 @@ int _strlen(const char *s);
 /**
  * functions for environ data structure
  */
-size_t print_listenv(structlist_t *structlist);
-void add_nodeenv_end(structlist_t **structlist, char *env);
+size_t print_listenv(env_t *envlist);
+void add_nodeenv_end(env_t **envlist, char *env);
 
 /**
  * cd
  */
 
-void exec_cd(structlist_t **structlist, char *cmd, char **arg);
-void exec_env(structlist_t **structlist,
+void exec_cd(env_t **envlist, char *cmd, char **arg);
+void exec_env(env_t **envlist,
 	      __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
-void exec_setenv(structlist_t **structlist, char *cmd, char **arg);
+void exec_setenv(env_t **envlist, char *cmd, char **arg);
 
 /**
  * free functions
  */
-void freeenvlist(structlist_t **structlist);
-void freearg(char ***arg);
+void freeenvlist(env_t **envlist);
+void freearg(char **arg);
 /**
  * other functions
  */

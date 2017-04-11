@@ -1,19 +1,18 @@
 #include "shell.h"
 #include <stdio.h>
-void exec_cd(structlist_t **structlist, char *cmd, char **arg)
+void exec_cd(env_t **envlist, char *cmd, char **arg)
 {
 	chdir(arg[1]);
 }
-void exec_env(structlist_t **structlist,
+void exec_env(env_t **envlist,
 __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
 {
-	print_listenv(*structlist);
+	print_listenv(*envlist);
 }
-void exec_setenv(structlist_t **structlist, char *cmd, char **arg)
+void exec_setenv(env_t **envlist, char *cmd, char **arg)
 {
 	char *name, *value;
 	int namelen, valuelen;
-
 
 	if (arg[1] == NULL || arg[2] == NULL)
 	{
@@ -28,10 +27,6 @@ void exec_setenv(structlist_t **structlist, char *cmd, char **arg)
 	strcpy(name, arg[1]);
 	strcpy(value, arg[2]);
 	printf("%s=%s", name, value);
-	_setenv(structlist,name, value);
-	/*
-	name = strtok(*arg, " ");
-	value = strtok(NULL, "");
-	_setenv(structlist, name, value);
-	*/
+	_setenv(envlist,name, value);
+
 }
