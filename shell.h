@@ -93,6 +93,12 @@ void exec_cd(structlist_t **structlist, char *cmd, char **arg);
 void exec_env(structlist_t **structlist,
 	      __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
 void exec_setenv(structlist_t **structlist, char *cmd, char **arg);
+
+/**
+ * free functions
+ */
+void freeenvlist(structlist_t **structlist);
+void freearg(char ***arg);
 /**
  * other functions
  */

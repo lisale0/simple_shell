@@ -16,7 +16,7 @@ int main()
         {
                 add_nodeenv_end(&structlist, *ep);
         }
-
+	//printf("%d", (structlist->envlist)->count);
 	/**
 	 * having issues with this call
 	 */
@@ -29,6 +29,7 @@ int main()
 	   _setenvtest(&structlist);*/
 	/**print_listenv(structlist);*/
 	prompt_user(&structlist);
+	freeenvlist(&structlist);
 	return (0);
 }
 
@@ -74,9 +75,8 @@ void prompt_user(structlist_t **structlist)
 		arg = split_line(line);
 		execute_arg(structlist, arg);
 	}
-
 	free(line);
-
+	freearg(&arg);
 }
 
 /**

@@ -35,6 +35,7 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
 	{
                 (*structlist)->envlist = newNode;
                 newNode->next = NULL;
+		(*structlist)->envlist->count += 1;
                 return;
 	}
         temp = (*structlist)->envlist;
@@ -44,6 +45,7 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
 	}
         temp->next = newNode;
 	newNode->next = NULL;
+	(*structlist)->envlist->count += 1;
 	return;
 }
 /**
