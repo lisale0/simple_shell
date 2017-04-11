@@ -15,9 +15,10 @@
 #include <errno.h>
 
 /**
- * 
+ *
  */
 #define BUFSIZE 1024
+#define TOKSIZE 64
 #define DELIM " \t\n"
 extern char **environ;
 /**
@@ -31,6 +32,7 @@ typedef struct env
 {
         char *key;
         char *value;
+	int count;
         struct env *next;
 }env_t;
 

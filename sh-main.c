@@ -20,11 +20,11 @@ int main()
 	/**
 	 * having issues with this call
 	 */
-	_unsetenv(&structlist, "PATH");
+	//_unsetenv(&structlist, "PATH");
 	/**
 	 * print_listenv is used to test is nodes are getting added correctly
 	 */
-	print_listenv(structlist);
+	//print_listenv(structlist);
 	/**
 	   _setenvtest(&structlist);*/
 	/**print_listenv(structlist);*/
@@ -74,6 +74,7 @@ void prompt_user(structlist_t **structlist)
 		arg = split_line(line);
 		execute_arg(structlist, arg);
 	}
+
 	free(line);
 
 }
@@ -87,7 +88,7 @@ void prompt_user(structlist_t **structlist)
 char **split_line(char *line)
 {
 	int i = 0;
-	int size = BUFSIZE;
+	int size = TOKSIZE;
 	char **tokens;
 	char *token;
 	char delim[3] = " \t\n";
@@ -149,7 +150,7 @@ int execute_arg(structlist_t **structlist, char **arg)
 			}
 			if (child_pid == 0)
 			{
-				if (execve(arg[0], arg) == -1)
+				if (execvp(arg[0], arg) == -1)
 					perror("hsh error");
 				exit(EXIT_FAILURE);
 			}

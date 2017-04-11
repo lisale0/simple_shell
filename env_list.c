@@ -21,6 +21,9 @@ void add_nodeenv_end(structlist_t **structlist, char *env)
         if (newNode == NULL)
                 return;
 	key = strtok(env, "=");
+	/**
+	 * need to fix this, there is a more elegant way to do this
+	 */
 	if (strcmp(key, "LS_COLORS") == 0)
 		value = strtok(NULL, "");
 	else
