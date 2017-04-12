@@ -15,6 +15,16 @@ void freeenvlist(env_t **envlist)
 	free(*envlist);
 }
 
+void freeptrenv(char **envlist)
+{
+	int i = 0;
+	while(envlist[i] != NULL)
+	{
+		free(envlist[i]);
+	}
+	free(envlist);
+}
+
 void freearg(char **arg)
 {
 	free(arg);
