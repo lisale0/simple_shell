@@ -160,7 +160,7 @@ int execute_arg(env_t **envlist, char **arg)
 			}
 			if (child_pid == 0)
 			{
-				if (execvp(arg[0], arg) == -1)
+				if (execve(arg[0], arg, NULL) == -1)
 					perror("hsh error");
 				exit(EXIT_FAILURE);
 			}
