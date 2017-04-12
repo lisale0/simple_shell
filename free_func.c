@@ -15,14 +15,16 @@ void freeenvlist(env_t **envlist)
 	free(*envlist);
 }
 
-void freeptrenv(char **envlist)
+void free_dblechar(char **arr)
 {
 	int i = 0;
-	while(envlist[i] != NULL)
+	while(arr[i] != NULL)
 	{
-		free(envlist[i]);
+	       	printf("dblechar: %s\n", arr[i]);
+		free(arr[i]);
+		i++;
 	}
-	free(envlist);
+	free(arr);
 }
 
 void freearg(char **arg)
