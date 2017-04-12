@@ -94,9 +94,11 @@ void exec_setenv(env_t **envlist, char *cmd, char **arg);
  */
 void freeenvlist(env_t **envlist);
 void freearg(char **arg);
+void freeptrenv(char **envlist);
 /**
  * other functions
  */
+char **envl_to_dptr(env_t **envlist);
 char *_getline();
 void printtest();
 #endif

@@ -139,7 +139,10 @@ int execute_arg(env_t **envlist, char **arg)
 {
 	pid_t child_pid;
 	int status, i;
+	char **envptr;
 
+	/**converting linked list to***/
+//	envptr = envl_to_dptr(envlist);
 	cmds_t cmd[] = {
 		{"cd", exec_cd},{"env", exec_env},{"setenv", exec_setenv},
 		{NULL, NULL}
@@ -149,7 +152,7 @@ int execute_arg(env_t **envlist, char **arg)
 	{
 		if (strcmp(arg[0],cmd[i].cmd) == 0)
 		{
-			cmd[i].f(envlist, arg[0], arg);
+			cmd[i].f(envlist, arg[0], envptr);
 		}
 		else
 		{
@@ -160,7 +163,7 @@ int execute_arg(env_t **envlist, char **arg)
 			}
 			if (child_pid == 0)
 			{
-				if (execvp(arg[0], arg) == -1)
+				if (execve(arg[0], arg, environ) == -1)
 					perror("hsh error");
 				exit(EXIT_FAILURE);
 			}
@@ -168,5 +171,6 @@ int execute_arg(env_t **envlist, char **arg)
 				wait(&status);
 		}
 	}
+	//freeptrenv(envptr);
 	return 1;
 }
