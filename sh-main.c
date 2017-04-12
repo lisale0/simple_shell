@@ -30,7 +30,8 @@ void testpath(env_t *envlist)
 	char *pathfound;
 	patharr = parse_path(envlist);
 	pathfound = build_path("ls", patharr);
-//	free(path);
+	if (pathfound != NULL)
+		free(pathfound);
 	printf("path pointer from main: %p\n", patharr);
 	free_dblechar(patharr);
 }

@@ -45,6 +45,7 @@ char *build_path(char *cmd, char **parsedpaths)
 
 	while(parsedpaths[i] != NULL)
 	{
+		/*
 		pathlen = _strlen(parsedpaths[i]);
 		pathname = malloc(pathlen + cmdlen + 2);
 		pathname = strcpy(pathname, parsedpaths[i]);
@@ -57,6 +58,7 @@ char *build_path(char *cmd, char **parsedpaths)
 			printf("pathname found: %s\n", pathname);
 			return(pathname);
 		}
+		*/
 		i++;
 	}
 	return (NULL);
