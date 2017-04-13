@@ -1,5 +1,11 @@
 #include "shell.h"
 
+/**
+ * parse_path - parsing path from linkedlist envlist
+ * @envlist: linkedlist envlist
+ *
+ * Return: double dimensional array
+ */
 char **parse_path(env_t *envlist)
 {
 	char **patharr;
@@ -9,9 +15,6 @@ char **parse_path(env_t *envlist)
 	int i = 0, size = TOKSIZE;
 
 	path = _getenv(envlist, "PATH");
-	printf("env: %p\n", _getenv(envlist, "PATH"));
-	printf("path: %p\n", path);
-
 	patharr = malloc(sizeof(char *) * size);
 	if (patharr == NULL)
 		return (NULL);
@@ -20,7 +23,6 @@ char **parse_path(env_t *envlist)
 	while (tokpath != NULL)
 	{
 		patharr[i] = strdup(tokpath);
-		printf("patharr[%d]: %s", i, patharr[i]);
 		i++;
 		if (i >= size)
 		{
@@ -35,30 +37,35 @@ char **parse_path(env_t *envlist)
 	return (patharr);
 }
 
+/**
+ * build_path - find path where command is an executable
+ * @cmd: command
+ * @parsedpaths: all the different paths
+ *
+ * Return: string path
+ */
 char *build_path(char *cmd, char **parsedpaths)
 {
 	char *pathname;
-	int i = 0, len = 0, cmdlen, pathlen;
+	int i = 0, cmdlen, pathlen, mem;
 
 	cmdlen = _strlen(cmd);
-	printf("cmdlen %d\n", cmdlen);
-
-	while(parsedpaths[i] != NULL)
+	while (parsedpaths[i] != NULL)
 	{
-		/*
 		pathlen = _strlen(parsedpaths[i]);
-		pathname = malloc(pathlen + cmdlen + 2);
+		mem = pathlen + cmdlen + 2;
+		pathname = malloc(mem * sizeof(char));
+		if (pathname == NULL)
+			return (NULL);
 		pathname = strcpy(pathname, parsedpaths[i]);
 		pathname = strcat(pathname, "/");
 		pathname = strcat(pathname, cmd);
 		pathname = strcat(pathname, "\0");
-		printf("%s", pathname);
 		if (access(pathname, F_OK) == 0)
 		{
-			printf("pathname found: %s\n", pathname);
-			return(pathname);
+			return (pathname);
 		}
-		*/
+		free(pathname);
 		i++;
 	}
 	return (NULL);
