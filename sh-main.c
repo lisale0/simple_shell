@@ -59,7 +59,10 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		pathfound = build_path(arg[0], patharr);
+		if (access(arg[0], F_OK) == 0)
+			pathfound = arg[0];
+		else
+			pathfound = build_path(arg[0], patharr);
 		execute_arg(envlist, arg, pathfound);
 		if (arg != NULL)
 			freearg(arg);
