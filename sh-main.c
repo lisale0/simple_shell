@@ -133,7 +133,6 @@ char **split_line(char *line)
 int check_builtin(char **arg)
 {
 	int i;
-
 	bt_t builtin[] = {
 		{"cd", exec_cd},
 		{"exit", exec_exit},
@@ -144,12 +143,12 @@ int check_builtin(char **arg)
 	{
 		if (arg[0] && strcmp(arg[0], builtin[i].builtin) == 0)
 			{
-				builtin[i].f(arg[0], arg);
+				builtin[i].f(NULL, arg[0], arg);
+				return (1);
 			}
-		return (0);
 	}
 
-	return (1);
+	return (0);
 }
 /**
  * execute_arg - execute the arguments passed in
@@ -164,7 +163,10 @@ int execute_arg(env_t **envlist, char **arg)
 	pid_t child_pid;
 	int status, i;
 	char **envptr;
+	int checkretval;
 
+	if ((checkretval = check_builtin(arg)) == 1)
+		return (1);
 	/**converting linked list to***/
 	//envptr = envl_to_dptr(envlist);
 	cmds_t cmd[] = {
@@ -184,13 +186,13 @@ int execute_arg(env_t **envlist, char **arg)
 		{
         		if (child_pid == -1)
 			{
-				perror("hsh error");
+				//		perror("hsh error");
 				return (-1);
 			}
 			if (child_pid == 0)
 			{
 				if (execve(arg[0], arg, environ) == -1)
-					perror("hsh error");
+					//	perror("hsh error");
 				exit(EXIT_FAILURE);
 			}
 			else

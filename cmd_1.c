@@ -2,14 +2,13 @@
 #include <stdio.h>
 int exec_cd(env_t **envlist, char *cmd, char **arg)
 {
-
         if (arg[1] == NULL)
         {
                 fprintf(stderr, "SH: expected argument.\n");
         }
         else
         {
-                if (chdir(arg[1]) != 0)
+                if (chdir(arg[1]) == 0)
                         perror("sh");
         }
         return (1);
