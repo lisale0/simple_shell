@@ -51,8 +51,18 @@ typedef struct structlist
 typedef struct cmds
 {
 	char *cmd;
-	void (*f)();
+	int (*f)();
 }cmds_t;
+/**
+ * struct - structure for builtins
+ * @builtins: user input
+ * @f: function pointer
+ */
+typedef struct builtins
+{
+	char *builtin;
+	int (*f)();
+}bt_t;
 /**
  * primary functions in main file
  */
@@ -83,11 +93,11 @@ void add_nodeenv_end(env_t **envlist, char *env);
 /**
  * cd
  */
-
-void exec_cd(env_t **envlist, char *cmd, char **arg);
-void exec_env(env_t **envlist,
+int exec_exit(env_t **envlist, char *cmd, char **arg);
+int exec_cd(env_t **envlist, char *cmd, char **arg);
+int exec_env(env_t **envlist,
 	      __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
-void exec_setenv(env_t **envlist, char *cmd, char **arg);
+int exec_setenv(env_t **envlist, char *cmd, char **arg);
 
 /**
  * free functions
