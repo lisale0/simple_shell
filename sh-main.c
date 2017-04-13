@@ -33,7 +33,7 @@ void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
 	int retval = 1, pipe = 0;
-	char *pathfound;
+	char *path;
 	char *line = NULL;
 	char **arg;
 	struct stat sb;
@@ -59,17 +59,21 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		if (access(arg[0], F_OK) == 0)
-			pathfound = arg[0];
+		if (access(arg[0], X_OK) == 0)
+		{
+			path = _strdup(arg[0]);
+		}
 		else
-			pathfound = build_path(arg[0], patharr);
-		execute_arg(envlist, arg, pathfound);
+			path = build_path(arg[0], patharr);
+		execute_arg(envlist, arg, path);
 		if (arg != NULL)
+		{
 			freearg(arg);
+		}
 		if (pipe == 0)
 			printf("$ ");
+		free(path);
 	}
-	free(pathfound);
 	free(line);
 }
 
@@ -82,7 +86,7 @@ void prompt_user(env_t **envlist, char **patharr)
 char **split_line(char *line)
 {
 	int i = 0;
-	int size = TOKSIZE;
+	int size = TOKSIZE, oldsize;
 	char **tokens;
 	char *token;
 	char *delim = " \t\n";
@@ -100,8 +104,9 @@ char **split_line(char *line)
 		i++;
 		if (i >= size)
 		{
+			oldsize = size;
 			size += BUFSIZE;
-			tokens = realloc(tokens, sizeof(char *) * size);
+			tokens = _realloc(tokens, oldsize, sizeof(char *) * size);
 			if (tokens == NULL)
 			{
 				perror("tokenize fail");
@@ -118,7 +123,7 @@ char **split_line(char *line)
  *
  * Return: 1 if builtin command, 0 otherwise
  */
-int check_builtin(char **arg, env_t *envlist)
+int check_builtin(char **arg, env_t **envlist)
 {
 	int i;
 
@@ -153,7 +158,7 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	int status;
 	int checkretval;
 
-	checkretval = check_builtin(arg, *envlist);
+	checkretval = check_builtin(arg, envlist);
 	if (checkretval == 1)
 		return (1);
 	/**converting linked list to*/

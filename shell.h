@@ -70,7 +70,7 @@ void set_envlist(env_t **envlist);
 void prompt_user(env_t **envlist, char **patharr);
 char **split_line(char *line);
 int execute_arg(env_t **envlist, char **arg, char *path);
-int check_builtin(char **arg, env_t *envlist);
+int check_builtin(char **arg, env_t **envlist);
 
 /**
  * get, set, and unset env, manipulation of nodes in the link [env_cmd.c]
@@ -93,9 +93,8 @@ void add_nodeenv_end(env_t **envlist, char *env);
 int exec_exit(env_t **envlist, char *cmd, char **arg);
 int exec_cd(env_t **envlist, char *cmd, char **arg);
 int exec_env(env_t **envlist,
-__attribute__((unused))char *cmd, __attribute__((unused))char **arg);
+	     __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
 int exec_setenv(env_t **envlist, char *cmd, char **arg);
-
 /**
  * free functions [free_func.c]
  */
@@ -115,9 +114,10 @@ char *build_path(char *cmd, char **parsedpaths);
 char *_strcat(char *dest, const char *src);
 int _strlen(const char *s);
 char *_strdup(char *str);
-
+char *_strcpy(char *dest, char *src);
 /**
  * other functions
  */
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 char **envl_to_dptr(env_t **envlist);
 #endif

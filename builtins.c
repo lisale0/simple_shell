@@ -9,7 +9,7 @@ int exec_cd(env_t **envlist, char *cmd, char **arg)
         }
         else
         {
-                if (chdir(arg[1]) == 0)
+                if (chdir(arg[1]) != 0)
                         perror("sh");
         }
         return (1);
