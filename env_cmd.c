@@ -81,7 +81,6 @@ int _unsetenv(env_t **envlist, const char *name)
 	{
 		if (strcmp((temp->next)->key, name) == 0)
 		{
-			printf("found key: %s name: %s\n", temp->key, name);
 			deleteNode = temp->next;
 			temp->next = deleteNode->next;
 			free(deleteNode);

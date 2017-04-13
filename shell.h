@@ -67,9 +67,9 @@ typedef struct builtins
  * primary functions in main file
  */
 void set_envlist(env_t **envlist);
-void prompt_user(env_t **envlist);
+void prompt_user(env_t **envlist, char **patharr);
 char **split_line(char *line);
-int execute_arg(env_t **envlist, char **arg);
+int execute_arg(env_t **envlist, char **arg, char *path);
 
 /**
  * get, set, and unset env
@@ -83,7 +83,7 @@ int _unsetenv(env_t **envlist, const char *name);
  */
 char *_strcat(char *dest, const char *src);
 int _strlen(const char *s);
-
+char *_strdup(char *str);
 /**
  * functions for environ data structure
  */
@@ -104,8 +104,7 @@ int exec_setenv(env_t **envlist, char *cmd, char **arg);
  */
 void freeenvlist(env_t **envlist);
 void freearg(char **arg);
-void free_dblchar(char **arr);
-
+void free_dblechar(char **arr);
 /**
  * path functions
  */
@@ -116,6 +115,4 @@ char *build_path(char *cmd, char **parsedpaths);
  * other functions
  */
 char **envl_to_dptr(env_t **envlist);
-char *_getline();
-void printtest();
 #endif

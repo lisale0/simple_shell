@@ -47,7 +47,7 @@ char **parse_path(env_t *envlist)
 char *build_path(char *cmd, char **parsedpaths)
 {
 	char *pathname;
-	int i = 0, len = 0, cmdlen, pathlen, mem;
+	int i = 0, cmdlen, pathlen, mem;
 
 	cmdlen = _strlen(cmd);
 	while (parsedpaths[i] != NULL)

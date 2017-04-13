@@ -120,6 +120,7 @@ int check_builtin(char **arg)
 
 	bt_t builtin[] = {
 		{"cd", exec_cd},
+		{"env", exec_env},
 		{"exit", exec_exit},
 		{NULL, NULL}
 	};
@@ -145,8 +146,7 @@ int check_builtin(char **arg)
 int execute_arg(env_t **envlist, char **arg, char *path)
 {
 	pid_t child_pid;
-	int status, i;
-	char **envptr;
+	int status;
 	int checkretval;
 
 	checkretval = check_builtin(arg);
