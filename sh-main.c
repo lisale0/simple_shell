@@ -5,81 +5,71 @@
  *
  * Return: Always 0 for success
  */
-void testpath(env_t *envlist);
-int main()
+int main(void)
 {
-	/*adding structlist*/
-        char **ep;
+	char **ep;
 	env_t *envlist = NULL;
+	char **patharr;
 
-        for (ep = environ; *ep != NULL; ep++)
-        {
-                add_nodeenv_end(&envlist, *ep);
-        }
-	testpath(envlist);
-	prompt_user(&envlist);
-	/*this frees what I want*/
+	for (ep = environ; *ep != NULL; ep++)
+	{
+		add_nodeenv_end(&envlist, *ep);
+	}
+	patharr = parse_path(envlist);
+	prompt_user(&envlist, patharr);
+	free_dblechar(patharr);
 	freeenvlist(&envlist);
-	//free(structlist);
 	return (0);
 }
 
-void testpath(env_t *envlist)
+/**
+ * prompt_user - prompts the user for command or pipe in commands to file
+ * @envlist: linkedlist of environment vars
+ * @patharr: an array of path tokenized
+ *
+ * Return: none
+ */
+void prompt_user(env_t **envlist, char **patharr)
 {
-	char **patharr;
-	char *pathfound;
-	patharr = parse_path(envlist);
-	pathfound = build_path("ls", patharr);
-	if (pathfound != NULL)
-		free(pathfound);
-	printf("path pointer from main: %p\n", patharr);
-	free_dblechar(patharr);
-}
-
-void prompt_user(env_t **envlist)
-{
-	char *line = NULL;
 	size_t n;
-	int retval = 1;
+	int retval = 1, pipe = 0;
+	char *pathfound;
+	char *line = NULL;
 	char **arg;
 	struct stat sb;
-	int pipe = 0;
 
-	if (fstat(STDIN_FILENO, &sb) == -1) {
-                perror("stat");
-                exit(EXIT_FAILURE);
-        }
-
+	if (fstat(STDIN_FILENO, &sb) == -1)
+	{
+		perror("stat");
+		exit(EXIT_FAILURE);
+	}
 	/**
-	 *determine if this is a non-interactive mode*/
-
+	 *determine if this is a non-interactive mode
+	 */
 	switch (sb.st_mode & S_IFMT)
 	{
-	case S_IFIFO:  pipe = 1;
+	case S_IFIFO:
+		pipe = 1;
 		break;
 	}
 	if (pipe == 0)
 		printf("$ ");
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
-		/**
-		 * get the line
-		 */
-		/**
-		 *if return value for getline fails return,
-		 * do not continue on with the function
-		 **/
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		execute_arg(envlist, arg);
-
+		if (access(arg[0], F_OK) == 0)
+			pathfound = arg[0];
+		else
+			pathfound = build_path(arg[0], patharr);
+		execute_arg(envlist, arg, pathfound);
 		if (arg != NULL)
 			freearg(arg);
-
 		if (pipe == 0)
 			printf("$ ");
 	}
+	free(pathfound);
 	free(line);
 }
 
@@ -89,22 +79,19 @@ void prompt_user(env_t **envlist)
  *
  * Return: 2D array, array of strings
  */
-
-
 char **split_line(char *line)
 {
 	int i = 0;
 	int size = TOKSIZE;
 	char **tokens;
-	char *token = "";
+	char *token;
 	char *delim = " \t\n";
 
-	tokens = malloc(sizeof(char*) * size);
-
+	tokens = malloc(sizeof(char *) * size);
 	if (tokens == NULL)
 	{
-		printf("failed to allocate meory for tokens\n");
-		return NULL;
+		perror("failed to allocate memory for tokens\n");
+		return (NULL);
 	}
 	token = strtok(line, delim);
 	while (token != NULL)
@@ -114,95 +101,78 @@ char **split_line(char *line)
 		if (i >= size)
 		{
 			size += BUFSIZE;
-			tokens = realloc(tokens, sizeof(char*) * size);
+			tokens = realloc(tokens, sizeof(char *) * size);
 			if (tokens == NULL)
 			{
-				printf("tokenize fail");
+				perror("tokenize fail");
 			}
 		}
 		token = strtok(NULL, delim);
 	}
- 	/**
-	 *making the last one null, set for execvp
-	 */
 	tokens[i] = NULL;
 	return (tokens);
 }
 /**
+ * check_builtin - check if the command is a builtin
+ * @arg: the arguments passed in from user
  *
+ * Return: 1 if builtin command, 0 otherwise
  */
-int check_builtin(char **arg)
+int check_builtin(char **arg, env_t *envlist)
 {
 	int i;
+
 	bt_t builtin[] = {
 		{"cd", exec_cd},
+		{"env", exec_env},
 		{"exit", exec_exit},
 		{NULL, NULL}
 	};
-
 	for (i = 0; builtin[i].builtin != NULL; i++)
 	{
 		if (arg[0] && strcmp(arg[0], builtin[i].builtin) == 0)
-			{
-				builtin[i].f(NULL, arg[0], arg);
-				return (1);
-			}
+		{
+			builtin[i].f(envlist, arg[0], arg);
+			return (1);
+		}
 	}
-
 	return (0);
 }
 /**
  * execute_arg - execute the arguments passed in
+ * @envlist: linkedlist envlist
  * @arg: arguments passed in
+ * @path: the path that command is part of
  *
  * Return: 1 if passed, otherwise -1 if failed
  */
-// check if builtin
 
-int execute_arg(env_t **envlist, char **arg)
+int execute_arg(env_t **envlist, char **arg, char *path)
 {
 	pid_t child_pid;
-	int status, i;
-	char **envptr;
+	int status;
 	int checkretval;
 
-	if ((checkretval = check_builtin(arg)) == 1)
+	checkretval = check_builtin(arg, *envlist);
+	if (checkretval == 1)
 		return (1);
-	/**converting linked list to***/
-	//envptr = envl_to_dptr(envlist);
-	cmds_t cmd[] = {
-		{"env", exec_env},{"setenv", exec_setenv},
-		{NULL, NULL}
-	};
-//	cmd[0].f(envlist, arg[0], arg);
+	/**converting linked list to*/
+	/**envptr = envl_to_dptr(envlist);*/
 	child_pid = fork();
-	for (i = 0; cmd[i].cmd != NULL; i++)
+	if (child_pid == -1)
 	{
-		if (arg[0] && strcmp(arg[0],cmd[i].cmd) == 0)
+		perror("hsh error - child is -1");
+		return (-1);
+	}
+	if (child_pid == 0)
+	{
+		if (execve(path, arg, environ) == -1)
 		{
-			cmd[i].f(envlist, arg[0], arg);
-		}
-
-		else
-		{
-        		if (child_pid == -1)
-			{
-				//		perror("hsh error");
-				return (-1);
-			}
-			if (child_pid == 0)
-			{
-
-				if (execve(arg[0], arg, environ) == -1)
-					//	perror("hsh error");
-
-				exit(EXIT_FAILURE);
-			}
-			else
-				wait(&status);
+			perror("hsh execve fail");
+			exit(EXIT_FAILURE);
 		}
 	}
-
-	//freeptrenv(envptr);
-	return 1;
+	else
+		wait(&status);
+	return (1);
 }

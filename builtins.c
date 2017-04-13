@@ -1,5 +1,6 @@
 #include "shell.h"
 #include <stdio.h>
+
 int exec_cd(env_t **envlist, char *cmd, char **arg)
 {
         if (arg[1] == NULL)
@@ -20,8 +21,14 @@ int exec_exit(env_t **envlist, char *cmd, char **arg)
 int exec_env(env_t **envlist,
 __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
 {
+	if (envlist == NULL)
+	{
+		perror("hsh environment list is NULL");
+		return (0);
+	}
+	printf("Hello");
 	print_listenv(*envlist);
-	return (0);
+	return (1);
 }
 int exec_setenv(env_t **envlist, char *cmd, char **arg)
 {
