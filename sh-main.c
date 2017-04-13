@@ -30,7 +30,7 @@ void testpath(env_t *envlist)
 	char *pathfound;
 	patharr = parse_path(envlist);
 	pathfound = build_path("ls", patharr);
-	if (pathfound != NULL)
+//	if (pathfound != NULL)
 		free(pathfound);
 	printf("path pointer from main: %p\n", patharr);
 	free_dblechar(patharr);
@@ -96,7 +96,7 @@ char **split_line(char *line)
 	int i = 0;
 	int size = TOKSIZE;
 	char **tokens;
-	char *token = "";
+	char *token;
 	char *delim = " \t\n";
 
 	tokens = malloc(sizeof(char*) * size);
@@ -142,8 +142,6 @@ int execute_arg(env_t **envlist, char **arg)
 	int status, i;
 	char **envptr;
 
-	/**converting linked list to***/
-//	envptr = envl_to_dptr(envlist);
 	cmds_t cmd[] = {
 		{"cd", exec_cd},{"env", exec_env},{"setenv", exec_setenv},
 		{NULL, NULL}
@@ -172,6 +170,5 @@ int execute_arg(env_t **envlist, char **arg)
 				wait(&status);
 		}
 	}
-	//freeptrenv(envptr);
 	return 1;
 }

@@ -38,16 +38,18 @@ char **parse_path(env_t *envlist)
 char *build_path(char *cmd, char **parsedpaths)
 {
 	char *pathname;
-	int i = 0, len = 0, cmdlen, pathlen;
+	int i = 0, len = 0, cmdlen, pathlen, mem;
 
 	cmdlen = _strlen(cmd);
 	printf("cmdlen %d\n", cmdlen);
 
 	while(parsedpaths[i] != NULL)
 	{
-		/*
 		pathlen = _strlen(parsedpaths[i]);
-		pathname = malloc(pathlen + cmdlen + 2);
+		mem = pathlen + cmdlen + 2;
+		pathname = malloc(mem * sizeof(char));
+		if (pathname == NULL)
+			return (NULL);
 		pathname = strcpy(pathname, parsedpaths[i]);
 		pathname = strcat(pathname, "/");
 		pathname = strcat(pathname, cmd);
@@ -56,10 +58,10 @@ char *build_path(char *cmd, char **parsedpaths)
 		if (access(pathname, F_OK) == 0)
 		{
 			printf("pathname found: %s\n", pathname);
-			return(pathname);
+			return (pathname);
 		}
-		*/
 		i++;
 	}
+	printf("I MADE IT HERE\n");
 	return (NULL);
 }
