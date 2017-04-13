@@ -140,9 +140,9 @@ int check_builtin(char **arg)
 		{NULL, NULL}
 	};
 
-	for (i = 0; builtin[i] != NULL; i++)
+	for (i = 0; builtin[i].builtin != NULL; i++)
 	{
-		if (arg[0] && strcmp(arg[0].builtin[i].cmd) == 0)
+		if (arg[0] && strcmp(arg[0], builtin[i].builtin) == 0)
 			{
 				builtin[i].f(arg[0], arg);
 			}
