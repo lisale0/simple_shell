@@ -1,5 +1,4 @@
 #include "shell.h"
-void _setenvtest();
 /**
  * _getenv - get an environment variable
  *

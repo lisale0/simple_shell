@@ -69,6 +69,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (pipe == 0)
 			printf("$ ");
 	}
+	free(pathfound);
 	free(line);
 }
 
@@ -117,7 +118,7 @@ char **split_line(char *line)
  *
  * Return: 1 if builtin command, 0 otherwise
  */
-int check_builtin(char **arg)
+int check_builtin(char **arg, env_t *envlist)
 {
 	int i;
 
@@ -131,7 +132,7 @@ int check_builtin(char **arg)
 	{
 		if (arg[0] && strcmp(arg[0], builtin[i].builtin) == 0)
 		{
-			builtin[i].f(NULL, arg[0], arg);
+			builtin[i].f(envlist, arg[0], arg);
 			return (1);
 		}
 	}
@@ -152,7 +153,7 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	int status;
 	int checkretval;
 
-	checkretval = check_builtin(arg);
+	checkretval = check_builtin(arg, *envlist);
 	if (checkretval == 1)
 		return (1);
 	/**converting linked list to*/

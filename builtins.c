@@ -26,6 +26,7 @@ __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
 		perror("hsh environment list is NULL");
 		return (0);
 	}
+	printf("Hello");
 	print_listenv(*envlist);
 	return (1);
 }
