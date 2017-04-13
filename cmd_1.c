@@ -1,15 +1,30 @@
 #include "shell.h"
 #include <stdio.h>
-void exec_cd(env_t **envlist, char *cmd, char **arg)
+int exec_cd(env_t **envlist, char *cmd, char **arg)
 {
-	chdir(arg[1]);
+
+        if (arg[1] == NULL)
+        {
+                fprintf(stderr, "SH: expected argument.\n");
+        }
+        else
+        {
+                if (chdir(arg[1]) != 0)
+                        perror("sh");
+        }
+        return (1);
 }
-void exec_env(env_t **envlist,
+int exec_exit(env_t **envlist, char *cmd, char **arg)
+{
+	return (0);
+}
+int exec_env(env_t **envlist,
 __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
 {
 	print_listenv(*envlist);
+	return (0);
 }
-void exec_setenv(env_t **envlist, char *cmd, char **arg)
+int exec_setenv(env_t **envlist, char *cmd, char **arg)
 {
 	char *name, *value;
 	int namelen, valuelen;
@@ -29,4 +44,5 @@ void exec_setenv(env_t **envlist, char *cmd, char **arg)
 	printf("%s=%s", name, value);
 	_setenv(envlist,name, value);
 
+	return (0);
 }

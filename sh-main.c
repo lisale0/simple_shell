@@ -127,13 +127,37 @@ char **split_line(char *line)
 	tokens[i] = NULL;
 	return (tokens);
 }
+/**
+ *
+ */
+int check_builtin(char **arg)
+{
+	int i;
 
+	bt_t builtin[] = {
+		{"cd", exec_cd},
+		{"exit", exec_exit},
+		{NULL, NULL}
+	};
+
+	for (i = 0; builtin[i] != NULL; i++)
+	{
+		if (arg[0] && strcmp(arg[0].builtin[i].cmd) == 0)
+			{
+				builtin[i].f(arg[0], arg);
+			}
+		return (0);
+	}
+
+	return (1);
+}
 /**
  * execute_arg - execute the arguments passed in
  * @arg: arguments passed in
  *
  * Return: 1 if passed, otherwise -1 if failed
  */
+// check if builtin
 
 int execute_arg(env_t **envlist, char **arg)
 {
@@ -142,18 +166,20 @@ int execute_arg(env_t **envlist, char **arg)
 	char **envptr;
 
 	/**converting linked list to***/
-//	envptr = envl_to_dptr(envlist);
+	//envptr = envl_to_dptr(envlist);
 	cmds_t cmd[] = {
-		{"cd", exec_cd},{"env", exec_env},{"setenv", exec_setenv},
+		{"env", exec_env},{"setenv", exec_setenv},
 		{NULL, NULL}
 	};
+//	cmd[0].f(envlist, arg[0], arg);
 	child_pid = fork();
 	for (i = 0; cmd[i].cmd != NULL; i++)
 	{
-		if (strcmp(arg[0],cmd[i].cmd) == 0)
+		if (arg[0] && strcmp(arg[0],cmd[i].cmd) == 0)
 		{
-			cmd[i].f(envlist, arg[0], envptr);
+			cmd[i].f(envlist, arg[0], arg);
 		}
+
 		else
 		{
         		if (child_pid == -1)
@@ -171,6 +197,7 @@ int execute_arg(env_t **envlist, char **arg)
 				wait(&status);
 		}
 	}
+
 	//freeptrenv(envptr);
 	return 1;
 }
