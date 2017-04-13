@@ -5,34 +5,35 @@
  *
  * Return: Always 0 for success
  */
+void testpath(env_t *envlist);
 int main()
 {
 	/*adding structlist*/
         char **ep;
 	env_t *envlist = NULL;
 
-	/*envlist = NULL;*/
         for (ep = environ; *ep != NULL; ep++)
         {
                 add_nodeenv_end(&envlist, *ep);
         }
-	//printf("%d", (structlist->envlist)->count);
-	/**
-	 * having issues with this call
-	 */
-	//_unsetenv(&structlist, "PATH");
-	/**
-	 * print_listenv is used to test is nodes are getting added correctly
-	 */
-	//print_listenv(structlist);
-	/**
-	   _setenvtest(&structlist);*/
-
+	testpath(envlist);
 	prompt_user(&envlist);
 	/*this frees what I want*/
 	freeenvlist(&envlist);
 	//free(structlist);
 	return (0);
+}
+
+void testpath(env_t *envlist)
+{
+	char **patharr;
+	char *pathfound;
+	patharr = parse_path(envlist);
+	pathfound = build_path("ls", patharr);
+	if (pathfound != NULL)
+		free(pathfound);
+	printf("path pointer from main: %p\n", patharr);
+	free_dblechar(patharr);
 }
 
 void prompt_user(env_t **envlist)
@@ -113,10 +114,10 @@ char **split_line(char *line)
 		if (i >= size)
 		{
 			size += BUFSIZE;
-			tokens = realloc(tokens, sizeof(char*) * 2);
+			tokens = realloc(tokens, sizeof(char*) * size);
 			if (tokens == NULL)
 			{
-				printf("failed to allocate meory for tokens\n");
+				printf("tokenize fail");
 			}
 		}
 		token = strtok(NULL, delim);
@@ -191,8 +192,10 @@ int execute_arg(env_t **envlist, char **arg)
 			}
 			if (child_pid == 0)
 			{
+
 				if (execve(arg[0], arg, environ) == -1)
 					//	perror("hsh error");
+
 				exit(EXIT_FAILURE);
 			}
 			else

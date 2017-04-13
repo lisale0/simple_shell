@@ -104,7 +104,14 @@ int exec_setenv(env_t **envlist, char *cmd, char **arg);
  */
 void freeenvlist(env_t **envlist);
 void freearg(char **arg);
-void freeptrenv(char **envlist);
+void free_dblchar(char **arr);
+
+/**
+ * path functions
+ */
+
+char **parse_path(env_t *envlist);
+char *build_path(char *cmd, char **parsedpaths);
 /**
  * other functions
  */
