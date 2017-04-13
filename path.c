@@ -47,6 +47,7 @@ char *build_path(char *cmd, char **parsedpaths)
 	{
 		pathlen = _strlen(parsedpaths[i]);
 		mem = pathlen + cmdlen + 2;
+		/**8 not freed*/
 		pathname = malloc(mem * sizeof(char));
 		if (pathname == NULL)
 			return (NULL);
