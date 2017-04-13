@@ -203,10 +203,7 @@ int execute_arg(env_t **envlist, char **arg)
 				wait(&status);
 		}
 	}
-<<<<<<< HEAD
-=======
 
 	//freeptrenv(envptr);
->>>>>>> master
 	return 1;
 }
