@@ -131,6 +131,8 @@ int check_builtin(char **arg, env_t **envlist)
 		{"cd", exec_cd},
 		{"env", exec_env},
 		{"exit", exec_exit},
+		{"setenv", exec_setenv},
+		{"unsetenv", exec_unsetenv},
 		{NULL, NULL}
 	};
 	for (i = 0; builtin[i].builtin != NULL; i++)

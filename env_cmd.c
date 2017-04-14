@@ -58,7 +58,6 @@ int _setenv(env_t **envlist, const char *name, const char *value)
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
                 add_nodeenv_end(envlist, env);
-		printf("entered");
 		free(env);
 	}
 	return (-1);
@@ -69,7 +68,7 @@ int _setenv(env_t **envlist, const char *name, const char *value)
  *
  * Return: 1 if successful delete, -1 if unsuccessful
  */
-int _unsetenv(env_t **envlist, const char *name)
+int _unsetenv(env_t **envlist, char *name)
 {
 	env_t *deleteNode, *temp;
 
@@ -78,7 +77,19 @@ int _unsetenv(env_t **envlist, const char *name)
 	temp = *envlist;
 	while (temp != NULL)
 	{
-		if (strcmp((temp->next)->key, name) == 0)
+		if (_strcmp((temp->key), name) == 0)
+		{
+			deleteNode = temp;
+			temp = deleteNode->next;
+			free(deleteNode);
+			return (1);
+		}
+		if (temp->next == NULL)
+		{
+			perror("env does not exist");
+			return (-1);
+		}
+		if (_strcmp((temp->next)->key, name) == 0)
 		{
 			deleteNode = temp->next;
 			temp->next = deleteNode->next;
@@ -87,5 +98,6 @@ int _unsetenv(env_t **envlist, const char *name)
 		}
 		temp = temp->next;
 	}
+	perror("Path name does not exist");
 	return (-1);
 }

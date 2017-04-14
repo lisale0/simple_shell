@@ -85,45 +85,27 @@ char *_strcpy(char *dest, char *src)
 	dest[i] = '\0';
 	return (dest);
 }
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+
+/**
+ * _strcmp - compares string
+ * @s1: first string
+ * @s2: second string
+ *
+ * Return: Int
+ */
+int _strcmp(char *s1, char *s2)
 {
-	void *newptr;
-	char *newptrcpy, *ptrcpy;
-	unsigned int i;
+	int i, dif, s1_length;
 
-	/*new size 0 and ptr not NULL*/
-	if (new_size == 0 && ptr != NULL)
+	dif = 0;
+	s1_length = _strlen(s1);
+	for (i = 0; i < s1_length; i++)
 	{
-		free(ptr);
-		return (NULL);
+		if ((int)s1[i] != (int)s2[i])
+		{
+			dif = -1;
+			break;
+		}
 	}
-	/*new_size same as old_size, no need to reallocate new mem*/
-	if (new_size == old_size)
-		return (ptr);
-	/*always allocate memory of new size*/
-	newptr = malloc(new_size);
-	if (newptr == NULL)
-		return (NULL);
-	/*If ptr is NULL, then the call is equivalent to malloc(new_size),*/
-	/*  for all values of old_size and new_size*/
-	if (ptr == NULL)
-		return (newptr);
-
-	ptrcpy = ptr;
-	newptrcpy = newptr;
-	/*if the newsize if bigger than the old_size, just keep old size*/
-	if (new_size > old_size)
-	{
-		for (i = 0; i < old_size; i++)
-			newptrcpy[i] = ptrcpy[i];
-	}
-	/*if the old size id bigger make sure to get the new size, more mem*/
-	else
-	{
-		for (i = 0; i < new_size; i++)
-			newptrcpy[i] = ptrcpy[i];
-	}
-	/*free ptr*/
-	free(ptr);
-	return (newptr);
+	return (dif);
 }

@@ -77,7 +77,7 @@ int check_builtin(char **arg, env_t **envlist);
  */
 char *_getenv(env_t *envlist, const char *name);
 int _setenv(env_t **envlist, const char *name, const char *value);
-int _unsetenv(env_t **envlist, const char *name);
+int _unsetenv(env_t **envlist, char *name);
 
 /**
  * functions for env_t envlist [env_list.c]
@@ -95,6 +95,7 @@ int exec_cd(env_t **envlist, char *cmd, char **arg);
 int exec_env(env_t **envlist,
 	     __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
 int exec_setenv(env_t **envlist, char *cmd, char **arg);
+int exec_unsetenv(env_t **envlist,  __attribute__((unused))char *cmd, char **arg);
 /**
  * free functions [free_func.c]
  */
@@ -115,6 +116,7 @@ char *_strcat(char *dest, const char *src);
 int _strlen(const char *s);
 char *_strdup(char *str);
 char *_strcpy(char *dest, char *src);
+int _strcmp(char *s1, char *s2);
 /**
  * other functions
  */

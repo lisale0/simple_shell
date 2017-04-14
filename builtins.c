@@ -26,7 +26,6 @@ __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
 		perror("hsh environment list is NULL");
 		return (0);
 	}
-	printf("Hello");
 	print_listenv(*envlist);
 	return (1);
 }
@@ -43,12 +42,25 @@ int exec_setenv(env_t **envlist, char *cmd, char **arg)
 	namelen = _strlen(arg[1]);
 	valuelen = _strlen(arg[2]);
 	name = malloc(namelen * sizeof(char));
-	value = malloc(valuelen * sizeof(char));
-
+	if (name == NULL)
+		return (-1);
+	value = malloc((valuelen + 1) * sizeof(char));
+	if (value == NULL)
+		return (-1);
 	strcpy(name, arg[1]);
 	strcpy(value, arg[2]);
-	printf("%s=%s", name, value);
+	strcat(value, "\0");
 	_setenv(envlist,name, value);
-
+	free(name);
+	free(value);
 	return (0);
+}
+int exec_unsetenv(env_t **envlist, char *cmd, char **arg)
+{
+	if (arg[1] == NULL)
+	{
+		perror("invalid arg");
+		return (-1);
+	}
+	_unsetenv(envlist, arg[1]);
 }
