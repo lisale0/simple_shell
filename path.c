@@ -13,8 +13,10 @@ char **parse_path(env_t *envlist)
 	char *tokpath;
 	char *delim = ":";
 	int i = 0, size = TOKSIZE, oldsize;
+	env_t *node;
 
-	path = _getenv(envlist, "PATH");
+	node = _getenv(envlist, "PATH");
+	path = node->value;
 	patharr = malloc(sizeof(char *) * size);
 	if (patharr == NULL)
 		return (NULL);

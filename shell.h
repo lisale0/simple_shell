@@ -75,7 +75,7 @@ int check_builtin(char **arg, env_t **envlist);
 /**
  * get, set, and unset env, manipulation of nodes in the link [env_cmd.c]
  */
-char *_getenv(env_t *envlist, const char *name);
+env_t *_getenv(env_t *envlist, const char *name);
 int _setenv(env_t **envlist, const char *name, const char *value);
 int _unsetenv(env_t **envlist, char *name);
 
@@ -92,10 +92,16 @@ void add_nodeenv_end(env_t **envlist, char *env);
  */
 int exec_exit(env_t **envlist, char *cmd, char **arg);
 int exec_cd(env_t **envlist, char *cmd, char **arg);
-int exec_env(env_t **envlist,
-	     __attribute__((unused))char *cmd, __attribute__((unused))char **arg);
+int exec_env(__attribute__((unused)) env_t **envlist,
+__attribute__((unused)) char *cmd, __attribute__((unused)) char **arg);
 int exec_setenv(env_t **envlist, char *cmd, char **arg);
 int exec_unsetenv(env_t **envlist,  __attribute__((unused))char *cmd, char **arg);
+
+/**
+ * builtins 2
+ */
+int exec_nl(__attribute__((unused))env_t **envlist,
+	    __attribute__((unused))char *cmd, char **arg);
 /**
  * free functions [free_func.c]
  */

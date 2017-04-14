@@ -5,7 +5,7 @@
  * Return: returns a pointer to the value in the  environment,
  * or NULL if there is no match.
  */
-char *_getenv(env_t *envlist, const char *name)
+env_t *_getenv(env_t *envlist, const char *name)
 {
 	env_t *temp;
 
@@ -13,7 +13,7 @@ char *_getenv(env_t *envlist, const char *name)
 	while(temp != NULL)
 	{
 		if (strcmp(temp->key, name) == 0)
-			return (temp->value);
+			return (temp);
 		temp = temp->next;
 	}
 	return (NULL);

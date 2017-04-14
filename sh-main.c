@@ -56,6 +56,11 @@ void prompt_user(env_t **envlist, char **patharr)
 		printf("$ ");
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
+		if (line[0] == 10)
+		{
+			write(1, "$ ", 2);
+			continue;
+		}
 		if (retval < 0)
 			break;
 		arg = split_line(line);
@@ -71,7 +76,7 @@ void prompt_user(env_t **envlist, char **patharr)
 			freearg(arg);
 		}
 		if (pipe == 0)
-			printf("$ ");
+			write(1, "$ ", 2);
 		free(path);
 	}
 	free(line);
@@ -133,6 +138,7 @@ int check_builtin(char **arg, env_t **envlist)
 		{"exit", exec_exit},
 		{"setenv", exec_setenv},
 		{"unsetenv", exec_unsetenv},
+		{"\n", exec_nl},
 		{NULL, NULL}
 	};
 	for (i = 0; builtin[i].builtin != NULL; i++)

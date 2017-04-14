@@ -28,9 +28,9 @@ void add_nodeenv_end(env_t **envlist, char *env)
 		value = strtok(NULL, "");
 	else
 		value = strtok(NULL, "=");
-        newNode->key = strdup(key);
-	newNode->value = strdup(value);
 
+        newNode->key =  strdup(key);
+	newNode->value = strdup(value);
         if (*envlist == NULL)
 	{
                 *envlist = newNode;
@@ -58,15 +58,64 @@ size_t print_listenv(env_t *envlist)
 {
         int i;
 	env_t *temp;
-        i = 0;
+	char *buff = "";
+	int slen = 0;
+	int listcount;
 
+	i = 0;
 	temp = envlist;
+	listcount = temp->count;
 	while (temp != NULL)
         {
-                printf("%s", temp->key);
-                printf("=%s\n", temp->value);
-                temp = temp->next;
-                i++;
+		slen += _strlen(temp->key) + _strlen(temp->value) + 20;
+		temp = temp->next;
 	}
+	buff = malloc(slen * sizeof(char));
+	if (buff == NULL)
+	{
+		printf("broken\n");
+		return (-1);
+	}
+	temp = envlist;
+        while (temp != NULL)
+	{
+		/*
+		printf("printinf buff %s\n", buff);
+		*/
+                buff = strcat(buff, temp->key);
+                buff = strcat(buff, "=");
+
+                buff = strcat(buff, temp->value);
+
+		if (i != listcount)
+			buff = strcat(buff, "\n");
+
+
+		printf("----------\n");
+		printf("i: %d ", i);
+		printf("temp->count %d\n", listcount);
+
+		/*
+		printf("%s\n", buff);
+		printf("-------------------------------\n");
+		*/
+                i++;
+		temp = temp->next;
+	}
+
+	buff = strcat(buff, "\0");
+
+	printf("%s", buff);
+/*
+	write(1, buff, 4000);
+*/
+/*
+	printf("strlen of buff %d\n", _strlen(buff));
+	printf("buff test with printf %s\n", buff);
+*/
+/*
+	write(1, buff, slen);
+*/
+	free(buff);
         return (i);
 }
