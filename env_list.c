@@ -57,65 +57,32 @@ void add_nodeenv_end(env_t **envlist, char *env)
 size_t print_listenv(env_t *envlist)
 {
         int i;
+	int len = 0;
 	env_t *temp;
-	char *buff = "";
-	int slen = 0;
-	int listcount;
+	char *buff;
 
 	i = 0;
 	temp = envlist;
-	listcount = temp->count;
-	while (temp != NULL)
-        {
-		slen += _strlen(temp->key) + _strlen(temp->value) + 20;
-		temp = temp->next;
-	}
-	buff = malloc(slen * sizeof(char));
-	if (buff == NULL)
-	{
-		printf("broken\n");
-		return (-1);
-	}
-	temp = envlist;
         while (temp != NULL)
 	{
-		/*
-		printf("printinf buff %s\n", buff);
-		*/
-                buff = strcat(buff, temp->key);
-                buff = strcat(buff, "=");
-
-                buff = strcat(buff, temp->value);
-
-		if (i != listcount)
-			buff = strcat(buff, "\n");
-
-
-		printf("----------\n");
-		printf("i: %d ", i);
-		printf("temp->count %d\n", listcount);
-
-		/*
-		printf("%s\n", buff);
-		printf("-------------------------------\n");
-		*/
-                i++;
+		buff = concat_env(temp->key, temp->value, &len);
+		write(1, buff, len);
+		write(1, "\n", 1);
 		temp = temp->next;
+		free(buff);
 	}
-
-	buff = strcat(buff, "\0");
-
-	printf("%s", buff);
-/*
-	write(1, buff, 4000);
-*/
-/*
-	printf("strlen of buff %d\n", _strlen(buff));
-	printf("buff test with printf %s\n", buff);
-*/
-/*
-	write(1, buff, slen);
-*/
-	free(buff);
         return (i);
+}
+
+char *concat_env(char *key, char *value, int *len)
+{
+	char *env;
+
+	*len = _strlen(key) + _strlen(value) + 2;
+	env = malloc((*len) * sizeof(char));
+	env = strcpy(env, key);
+	env = strcat(env, "=");
+	env = strcat(env, value);
+	env = strcat(env, "\0");
+	return (env);
 }

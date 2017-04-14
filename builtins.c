@@ -5,6 +5,7 @@ int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char 
 {
 	env_t *temp, *temp2;
 	char *oldpath, *currentpath;
+	ssize_t cwdlen;
 
         if (arg[1] == NULL)
                 fprintf(stderr, "SH: expected argument.\n");
@@ -19,16 +20,27 @@ int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char 
 			if (oldpath == NULL)
 				return (-1);
 			temp2 = _getenv(*envlist, "PWD");
-			currentpath = malloc((_strlen(temp2->value) + 1)
+			cwdlen = _strlen(temp2->value);
+			currentpath = malloc((cwdlen + 1)
 					     * sizeof(char));
 			if (currentpath == NULL)
 			{
 				free(oldpath);
 				return (-1);
 			}
+			/*getting the old path so I can change to that*/
 			oldpath = strcpy(oldpath, temp->value);
+			if (getcwd(currentpath, cwdlen) != NULL)
+                                printf("Current working dir: %s\n", currentpath);
+			if ((chdir(oldpath)) == 0)
+			{
+				/*oldpath = _realloc(oldpath, _strlen(oldpath));*/
+				/*PWD is not oldpath*/
+				_strcpy(temp2->value, oldpath);
+				/*change OLDPWD to currentpath*/
+				_strcpy(temp->value, currentpath);
+			}
 			printf("%s\n", oldpath);
-			chdir(oldpath);
 			return (1);
 		}
                 if (chdir(arg[1]) != 0)

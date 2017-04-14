@@ -85,7 +85,7 @@ int _unsetenv(env_t **envlist, char *name);
  */
 size_t print_listenv(env_t *envlist);
 void add_nodeenv_end(env_t **envlist, char *env);
-
+char *concat_env(char *key, char *value, int *len);
 /**
  * function pointers in C points to these functions [builtin.c]
  * execute builtins
