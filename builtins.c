@@ -16,7 +16,10 @@ int exec_cd(env_t **envlist, char *cmd, char **arg)
 }
 int exec_exit(env_t **envlist, char *cmd, char **arg)
 {
-	return (0);
+	int status;
+
+	exit(status);
+	return (status);
 }
 int exec_env(env_t **envlist,
 __attribute__((unused))char *cmd, __attribute__((unused))char **arg)
