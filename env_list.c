@@ -28,9 +28,9 @@ void add_nodeenv_end(env_t **envlist, char *env)
 		value = strtok(NULL, "");
 	else
 		value = strtok(NULL, "=");
-        newNode->key = strdup(key);
-	newNode->value = strdup(value);
 
+        newNode->key =  strdup(key);
+	newNode->value = strdup(value);
         if (*envlist == NULL)
 	{
                 *envlist = newNode;
@@ -57,16 +57,32 @@ void add_nodeenv_end(env_t **envlist, char *env)
 size_t print_listenv(env_t *envlist)
 {
         int i;
+	int len = 0;
 	env_t *temp;
-        i = 0;
+	char *buff;
 
+	i = 0;
 	temp = envlist;
-	while (temp != NULL)
-        {
-                printf("%s", temp->key);
-                printf("=%s\n", temp->value);
-                temp = temp->next;
-                i++;
+        while (temp != NULL)
+	{
+		buff = concat_env(temp->key, temp->value, &len);
+		write(1, buff, len);
+		write(1, "\n", 1);
+		temp = temp->next;
+		free(buff);
 	}
         return (i);
+}
+
+char *concat_env(char *key, char *value, int *len)
+{
+	char *env;
+
+	*len = _strlen(key) + _strlen(value) + 2;
+	env = malloc((*len) * sizeof(char));
+	env = strcpy(env, key);
+	env = strcat(env, "=");
+	env = strcat(env, value);
+	env = strcat(env, "\0");
+	return (env);
 }

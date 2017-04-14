@@ -36,8 +36,7 @@ int _strlen(const char *s)
 	{
 		count++;
 	}
-	return (i);
-}
+	return (i);}
 /**
  * _strdup - malloc, duplicate string
  * @str: the string to duplicate
@@ -64,4 +63,49 @@ char *_strdup(char *str)
 	}
 	ptr[i] = '\0';
 	return (ptr);
+}
+/**
+ * _strcpy - copies char array from src to dest
+ * @dest: copying to
+ * @src: copying from
+ *
+ * Return: char array dest
+ */
+char *_strcpy(char *dest, char *src)
+{
+	int length, i;
+
+	length = _strlen((char *)src);
+	if (dest == NULL)
+		return NULL;
+	for (i = 0; i < length; i++)
+	{
+		dest[i] = src[i];
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+/**
+ * _strcmp - compares string
+ * @s1: first string
+ * @s2: second string
+ *
+ * Return: Int
+ */
+int _strcmp(char *s1, char *s2)
+{
+	int i, dif, s1_length;
+
+	dif = 0;
+	s1_length = _strlen(s1);
+	for (i = 0; i < s1_length; i++)
+	{
+		if ((int)s1[i] != (int)s2[i])
+		{
+			dif = -1;
+			break;
+		}
+	}
+	return (dif);
 }
