@@ -24,7 +24,7 @@ void add_nodeenv_end(env_t **envlist, char *env)
 	/**
 	 * need to fix this, there is a more elegant way to do this
 	 */
-	if (strcmp(key, "LS_COLORS") == 0)
+	if (_strcmp(key, "LS_COLORS") == 0)
 		value = strtok(NULL, "");
 	else
 		value = strtok(NULL, "=");
