@@ -47,7 +47,7 @@ char **parse_path(env_t *envlist)
  *
  * Return: string path
  */
-char *build_path(char *cmd, char **parsedpaths)
+int build_path(char *cmd, char **parsedpaths, char **path)
 {
 	char *pathname = "";
 	int i = 0, cmdlen, pathlen, mem;
@@ -59,17 +59,18 @@ char *build_path(char *cmd, char **parsedpaths)
 		mem = pathlen + cmdlen + 2;
 		pathname = malloc(mem * sizeof(char));
 		if (pathname == NULL)
-			return (NULL);
+			return (0);
 		pathname = _strcpy(pathname, parsedpaths[i]);
 		pathname = _strcat(pathname, "/");
 		pathname = _strcat(pathname, cmd);
 		pathname = _strcat(pathname, "\0");
 		if (access(pathname, X_OK) == 0)
 		{
-			return (pathname);
+			*path = pathname;
+			return (1);
 		}
 		free(pathname);
 		i++;
 	}
-	return (NULL);
+	return (0);
 }

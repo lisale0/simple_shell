@@ -113,7 +113,7 @@ void free_dblechar(char **arr);
  * path functions [path.c]
  */
 char **parse_path(env_t *envlist);
-char *build_path(char *cmd, char **parsedpaths);
+int build_path(char *cmd, char **parsedpaths, char **path);
 
 /**
  * string helper functions [str_hlp.c]
