@@ -42,7 +42,7 @@ int _setenv(env_t **envlist, char *name, char *value)
         {
 		if (_strcmp(temp->key, name) == 0)
 		{
-			temp->value = strdup(value);
+			temp->value = _strdup(value);
 			found = 1;
 			break;
 		}
