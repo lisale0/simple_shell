@@ -75,8 +75,8 @@ int check_builtin(char **arg, env_t **envlist);
 /**
  * get, set, and unset env, manipulation of nodes in the link [env_cmd.c]
  */
-env_t *_getenv(env_t *envlist, const char *name);
-int _setenv(env_t **envlist, const char *name, const char *value);
+env_t *_getenv(env_t *envlist, char *name);
+int _setenv(env_t **envlist, char *name, char *value);
 int _unsetenv(env_t **envlist, char *name);
 
 /**
