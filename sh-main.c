@@ -143,7 +143,7 @@ int check_builtin(char **arg, env_t **envlist)
 	};
 	for (i = 0; builtin[i].builtin != NULL; i++)
 	{
-		if (arg[0] && strcmp(arg[0], builtin[i].builtin) == 0)
+		if (arg[0] && _strcmp(arg[0], builtin[i].builtin) == 0)
 		{
 			builtin[i].f(envlist, arg[0], arg);
 			return (1);

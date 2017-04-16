@@ -29,8 +29,8 @@ void add_nodeenv_end(env_t **envlist, char *env)
 	else
 		value = strtok(NULL, "=");
 
-        newNode->key =  strdup(key);
-	newNode->value = strdup(value);
+        newNode->key =  _strdup(key);
+	newNode->value = _strdup(value);
         if (*envlist == NULL)
 	{
                 *envlist = newNode;
