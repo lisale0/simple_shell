@@ -55,4 +55,4 @@ gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ### Authors
 *Lisa Leung* - [Github](https://github.com/lisale0) || [Twitter](https://twitter.com/lisale01) || [email](lisa.leung@holbertonschool.com)
 
-*Joe McDaniel* - [Github](https://github.com/joseph-mcdaniel || [Twitter](https://twitter.com/joe_w_mcdaniel || [email](joseph.mcdaniel@holbertonschool.com)
+*Joe McDaniel* - [Github](https://github.com/joseph-mcdaniel) || [Twitter](https://twitter.com/joe_w_mcdaniel) || [email](joseph.mcdaniel@holbertonschool.com)
