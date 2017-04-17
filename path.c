@@ -74,3 +74,30 @@ int build_path(char *cmd, char **parsedpaths, char **path)
 	}
 	return (0);
 }
+
+int check_cwdex(char *cmd)
+{
+	char *delim = "./ ";
+	char *token;
+/*
+	char *path;
+*/
+	token = strtok(cmd, delim);
+	if (cmd[0] == '.' && cmd[1] == '/')
+	{
+		if (access(token, X_OK) == 0)
+		{
+			/*
+			path = _strdup(token);
+			*/
+			return(1);
+		}
+	}
+	return (0);
+}
+/*
+int check_slash(char *cmd)
+{
+	
+}
+*/

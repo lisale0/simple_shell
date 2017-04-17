@@ -19,7 +19,7 @@
  */
 #define BUFSIZE 1024
 #define TOKSIZE 64
-#define DELIM " \t\n"
+#define DELIM " \t\n\r\""
 
 /**
  * Global
@@ -114,7 +114,7 @@ void free_dblechar(char **arr);
  */
 char **parse_path(env_t *envlist);
 int build_path(char *cmd, char **parsedpaths, char **path);
-
+int check_cwdex(char *cmd);
 /**
  * string helper functions [str_hlp.c]
  */
