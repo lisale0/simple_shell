@@ -71,24 +71,24 @@ void prompt_user(env_t **envlist, char **patharr)
 		/*if /bin/ls exists, then take this as a path*/
 		if (check_cwdex(arg[0]))
 		{
-			/*
+			
 			printf("1) true ./\n");
-			*/
+		       
 			path = _strdup(strtok(arg[0], "./"));
 		}
-		else if (access(arg[0], X_OK) == 0 && (check_cwdex(arg[0])))
+		if (access(arg[0], X_OK) == 0 && !(check_cwdex(arg[0])))
 		{
-			/*
+			
 			printf("2) true it is an executable\n");
-			*/
+		       
 			path = _strdup(arg[0]);
 		}
 		/*otherwise build it out using the PATH environment*/
 		else
 		{
-			/*
+		       
 			printf("3) build path\n");
-			*/
+			
 			build_path(arg[0], patharr, &path);
 			/*
 			printf("%s\n", path);
@@ -104,8 +104,9 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
-
+		/*
 		free(path);
+		*/
 	}
 	free(line);
 }
