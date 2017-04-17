@@ -171,7 +171,7 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	pid_t child_pid;
 	int status;
 	int checkretval;
-	int execveret;
+/*	int execveret;*/
 
 	checkretval = check_builtin(arg, envlist);
 	if (checkretval == 1)
@@ -186,12 +186,13 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	}
 	if (child_pid == 0)
 	{
-		execveret = execve(path, arg, environ);
-		if (execveret == -1)
+		execve(path, arg, environ);
+		/*if (execveret == -1)
 		{
 			perror("hsh execve fail");
 			exit(EXIT_FAILURE);
-		}
+			}*/
+		exit(EXIT_SUCCESS);
 	}
 	else
 		wait(&status);
