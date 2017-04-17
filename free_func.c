@@ -1,10 +1,16 @@
 #include "shell.h"
 
+/**
+ * freeenvlist - free linkedlist nodes of env_t
+ * @envlist: the envlist passed in
+ *
+ * Return: none; void function
+ */
 void freeenvlist(env_t **envlist)
 {
 	env_t *temp;
 
-        while (*envlist != NULL)
+	while (*envlist != NULL)
 	{
 		temp = *envlist;
 		*envlist = temp->next;
@@ -15,18 +21,20 @@ void freeenvlist(env_t **envlist)
 	free(*envlist);
 }
 
+/**
+ * free_dblechar - function to free double char
+ * @arr: the array to free
+ *
+ * Return: none; void
+ */
 void free_dblechar(char **arr)
 {
 	int i = 0;
-	while(arr[i] != NULL)
+
+	while (arr[i] != NULL)
 	{
 		free(arr[i]);
 		i++;
 	}
 	free(arr);
-}
-
-void freearg(char **arg)
-{
-	free(arg);
 }

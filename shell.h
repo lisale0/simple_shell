@@ -30,38 +30,29 @@ extern char **environ;
  * struct env - data structure, linked list for environ
  * @key: the key of the environment variable
  * @value: the values of the environment variable
- *
+ * @count: the count of the linkedlist
+ * @next: pointer to the next node
  * Description: a linked list for environment variables
  */
 typedef struct env
 {
-        char *key;
-        char *value;
+	char *key;
+	char *value;
 	int count;
-        struct env *next;
-}env_t;
-
-/**
- * struct - structure for commands and functions
- * @cmd: the input command by user
- * @f: function pointer
- */
-typedef struct cmds
-{
-	char *cmd;
-	int (*f)();
-}cmds_t;
+	struct env *next;
+} env_t;
 
 /**
  * struct - structure for builtins
  * @builtins: user input
  * @f: function pointer
+ * Description: builtin commands
  */
 typedef struct builtins
 {
 	char *builtin;
 	int (*f)();
-}bt_t;
+} bt_t;
 
 /**
  * primary functions in main file [sh-main.c]
@@ -95,7 +86,8 @@ int exec_cd(env_t **envlist, char *cmd, char **arg);
 int exec_env(__attribute__((unused)) env_t **envlist,
 __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg);
 int exec_setenv(env_t **envlist, char *cmd, char **arg);
-int exec_unsetenv(env_t **envlist,  __attribute__((unused))char *cmd, char **arg);
+int exec_unsetenv(env_t **envlist,
+		  __attribute__((unused))char *cmd, char **arg);
 
 /**
  * builtins 2

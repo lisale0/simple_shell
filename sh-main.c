@@ -33,8 +33,7 @@ void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
 	int retval = 1, pipe = 0;
-	char *path;
-	char *line = NULL;
+	char *path, *line = NULL;
 	char **arg;
 	struct stat sb;
 	char *a;
@@ -44,9 +43,6 @@ void prompt_user(env_t **envlist, char **patharr)
 		perror("stat");
 		exit(EXIT_FAILURE);
 	}
-	/**
-	 *determine if this is a non-interactive mode
-	 */
 	switch (sb.st_mode & S_IFMT)
 	{
 	case S_IFIFO:
@@ -64,40 +60,20 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		if (retval < 0)
 			break;
-		arg = split_line(line);
-		/*
-		if (access(arg[0], X_OK) == 0 && !(build_path(arg[0], patharr, &path)))
-		*/
-
-		/*if /bin/ls exists, then take this as a path*/
-		a = strdup(arg[0]);
+		arg = split_line(line); a = arg[0];
 		if (arg[0][0] == '.' && arg[0][1] == '/')
-		{
 			path = _strdup(strtok(arg[0], "./"));
-		}
 		else if (access(arg[0], X_OK) == 0 &&
 			 !(build_path(arg[0], patharr, &path)))
-		{
 			path = _strdup(a);
-		}
-		/*otherwise build it out using the PATH environment*/
 		else
-		{
 			build_path(arg[0], patharr, &path);
-		}
 		execute_arg(envlist, arg, path);
 		if (arg != NULL)
-		{
-			freearg(arg);
-		}
+			free(arg);
 		if (pipe == 0)
 			write(1, "$ ", 2);
-		/*
 		free(path);
-		*/
-/*
-		free(path);
-*/
 	}
 	free(line);
 }
@@ -185,13 +161,10 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	pid_t child_pid;
 	int status;
 	int checkretval;
-/*	int execveret;*/
 
 	checkretval = check_builtin(arg, envlist);
 	if (checkretval == 1)
 		return (1);
-	/**converting linked list to*/
-	/**envptr = envl_to_dptr(envlist);*/
 	child_pid = fork();
 	if (child_pid == -1)
 	{
@@ -201,11 +174,6 @@ int execute_arg(env_t **envlist, char **arg, char *path)
 	if (child_pid == 0)
 	{
 		execve(path, arg, environ);
-		/*if (execveret == -1)
-		{
-			perror("hsh execve fail");
-			exit(EXIT_FAILURE);
-			}*/
 		exit(EXIT_SUCCESS);
 	}
 	else

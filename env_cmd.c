@@ -1,7 +1,8 @@
 #include "shell.h"
 /**
  * _getenv - get an environment variable
- *
+ * @envlist: the linkedlist to check against
+ * @name: the key
  * Return: returns a pointer to the value in the  environment,
  * or NULL if there is no match.
  */
@@ -10,7 +11,7 @@ env_t *_getenv(env_t *envlist, char *name)
 	env_t *temp;
 
 	temp = envlist;
-	while(temp != NULL)
+	while (temp != NULL)
 	{
 		if (_strcmp(temp->key, name) == 0)
 			return (temp);
@@ -21,6 +22,7 @@ env_t *_getenv(env_t *envlist, char *name)
 
 /**
  * _setenv - change or add if it does exist;
+ * @envlist: the env list to check against
  * @name: the key of the environemental variable
  * @value: the new value
  *
@@ -38,8 +40,8 @@ int _setenv(env_t **envlist, char *name, char *value)
 		return (-1);
 	temp = *envlist;
 	/**Find is this key exists currently in the environment*/
-       while(temp != NULL)
-        {
+	while (temp != NULL)
+	{
 		if (_strcmp(temp->key, name) == 0)
 		{
 			temp->value = _strdup(value);
@@ -47,7 +49,7 @@ int _setenv(env_t **envlist, char *name, char *value)
 			break;
 		}
 		temp = temp->next;
-        }
+	}
 	if (found == 1)
 	{
 		return (1);
@@ -57,13 +59,14 @@ int _setenv(env_t **envlist, char *name, char *value)
 		env = strcpy(env, name);
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
-                add_nodeenv_end(envlist, env);
+		add_nodeenv_end(envlist, env);
 		free(env);
 	}
 	return (-1);
 }
 /**
  * _unsetenv - removing an environment variables, specified by name
+ * @envlist: the environment list to check against
  * @name: the key to delete
  *
  * Return: 1 if successful delete, -1 if unsuccessful

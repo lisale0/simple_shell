@@ -36,7 +36,8 @@ int _strlen(const char *s)
 	{
 		count++;
 	}
-	return (i);}
+	return (i);
+}
 /**
  * _strdup - malloc, duplicate string
  * @str: the string to duplicate
@@ -77,7 +78,7 @@ char *_strcpy(char *dest, char *src)
 
 	length = _strlen((char *)src);
 	if (dest == NULL)
-		return NULL;
+		return (NULL);
 	for (i = 0; i < length; i++)
 	{
 		dest[i] = src[i];
