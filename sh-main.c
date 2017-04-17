@@ -67,12 +67,17 @@ void prompt_user(env_t **envlist, char **patharr)
 		/*
 		if (access(arg[0], X_OK) == 0 && !(build_path(arg[0], patharr, &path)))
 		*/
+
+		/*if /bin/ls exists, then take this as a path*/
+		/*
 		if (access(arg[0], X_OK) == 0)
 		{
 			path = _strdup(arg[0]);
 		}
-		else
-			build_path(arg[0], patharr, &path);
+		*/
+		/*otherwise build it out using the PATH environment*/
+		/*else*/
+		build_path(arg[0], patharr, &path);
 		execute_arg(envlist, arg, path);
 		if (arg != NULL)
 		{
