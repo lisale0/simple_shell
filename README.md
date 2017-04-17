@@ -30,7 +30,9 @@ Simple Recreation of command-line shell.
 * 'write'
 * '_exit'
 ### Compilation
-* 'gcc -Wall -Werror -Wextra -pedantic *.c -o hsh'
+```
+'gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
+```
 ### File Description
 * 'shell.h'
 
