@@ -64,7 +64,10 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
+		/*
 		if (access(arg[0], X_OK) == 0 && !(build_path(arg[0], patharr, &path)))
+		*/
+		if (access(arg[0], X_OK) == 0)
 		{
 			path = _strdup(arg[0]);
 		}
@@ -94,7 +97,7 @@ char **split_line(char *line)
 	int size = TOKSIZE, oldsize;
 	char **tokens;
 	char *token;
-	char *delim = " \t\n";
+	char *delim = " \t\n\r\"";
 
 	tokens = malloc(sizeof(char *) * size);
 	if (tokens == NULL)
