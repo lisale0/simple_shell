@@ -60,7 +60,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		if (retval < 0)
 			break;
-		arg = split_line(line); a = arg[0];
+		arg = split_line(line);
 		if (arg[0][0] == '.' && arg[0][1] == '/')
 			path = _strdup(strtok(arg[0], "./"));
 		else if (access(arg[0], X_OK) == 0 &&
