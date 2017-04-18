@@ -37,7 +37,6 @@ void prompt_user(env_t **envlist, char **patharr)
 	char *path, *path2, *line = NULL;
 	char **arg;
 	struct stat sb;
-	char *a;
 
 	if (fstat(STDIN_FILENO, &sb) == -1)
 	{
