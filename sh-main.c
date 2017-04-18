@@ -29,11 +29,12 @@ int main(void)
  *
  * Return: none
  */
+
 void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
-	int retval = 1, pipe = 0;
-	char *path, *line = NULL;
+	int retval = 1, pipe = 0, retval2 = 0;
+	char *path, *path2, *line = NULL;
 	char **arg;
 	struct stat sb;
 	char *a;
@@ -65,19 +66,28 @@ void prompt_user(env_t **envlist, char **patharr)
 			path = _strdup(strtok(arg[0], "./"));
 		else if (access(arg[0], X_OK) == 0 &&
 			 !(build_path(arg[0], patharr, &path)))
-			path = _strdup(a);
+			path = _strdup(arg[0]);
 		else
-			build_path(arg[0], patharr, &path);
-		execute_arg(envlist, arg, path);
+			retval2 = build_path(arg[0], patharr, &path2);
+		if (retval2 == 1)
+		{
+			execute_arg(envlist, arg, path2);
+			free(path);
+			free(path2);
+		}
+		else
+		{
+			execute_arg(envlist, arg, path);
+			free(path);
+
+		}
 		if (arg != NULL)
 			free(arg);
 		if (pipe == 0)
 			write(1, "$ ", 2);
-		free(path);
 	}
 	free(line);
 }
-
 /**
  * split_line - splitting the input line into 2D array, set up for execvp
  * @line: the line passed in for parsing

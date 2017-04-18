@@ -56,6 +56,7 @@ int _setenv(env_t **envlist, char *name, char *value)
 	}
 	else
 	{
+		printf("hello\n");
 		env = strcpy(env, name);
 		env = _strcat(env, "=");
 		env = _strcat(env, value);

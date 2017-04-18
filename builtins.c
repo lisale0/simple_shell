@@ -83,15 +83,16 @@ int exec_setenv(env_t **envlist, __attribute__((unused)) char *cmd, char **arg)
 	}
 	namelen = _strlen(arg[1]);
 	valuelen = _strlen(arg[2]);
-	name = malloc(namelen * sizeof(char));
+	name = malloc((namelen + 2) * sizeof(char));
 	if (name == NULL)
 		return (-1);
-	value = malloc((valuelen + 1) * sizeof(char));
+	value = malloc((valuelen + 2) * sizeof(char));
 	if (value == NULL)
 		return (-1);
-	strcpy(name, arg[1]);
-	strcpy(value, arg[2]);
-	strcat(value, "\0");
+	_strcpy(name, arg[1]);
+	_strcpy(value, arg[2]);
+	_strcat(value, "\0");
+	_strcat(name, "\0");
 	_setenv(envlist,name, value);
 	free(name);
 	free(value);
