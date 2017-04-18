@@ -19,6 +19,7 @@ int main(void)
 	prompt_user(&envlist, patharr);
 	free_dblechar(patharr);
 	freeenvlist(&envlist);
+	printf("hello world");
 	return (0);
 }
 
@@ -33,7 +34,7 @@ int main(void)
 void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
-	int retval = 1, pipe = 0;
+	int retval = 1, pipe = 0, checkretval = 0, buildret = 0;
 	char *path;
 	char *line = NULL;
 	char **arg;
@@ -65,26 +66,31 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		/*
-		  if (access(arg[0], X_OK) == 0 && !(build_path(arg[0], patharr, &path)))
-		*/
-
-		/*if /bin/ls exists, then take this as a path*/
-		if (access(arg[0], X_OK) == 0)
+		checkretval = check_builtin(arg, envlist);
+                if (checkretval == 1)
+                {
+                        write(1, "$ ", 2);
+                        continue;
+                }
+		if (access(arg[0], F_OK) == 0)
 		{
-			path = _strdup(arg[0]);
+                        execute_arg(envlist, arg, arg[0]);
 		}
 		/*otherwise build it out using the PATH environment*/
 		else
-			build_path(arg[0], patharr, &path);
-		execute_arg(envlist, arg, path);
-		if (arg != NULL)
+			buildret = build_path(arg[0], patharr, &path);
+
+		if (buildret == 1)
+			execute_arg(envlist, arg, path);
+		else
 		{
-			free(arg);
+			write(1, "$ ", 2);
+			continue;
 		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
 		free(path);
+		free(arg);
 	}
 	free(line);
 }
@@ -163,25 +169,25 @@ int check_builtin(char **arg, env_t **envlist)
  * Return: 1 if passed, otherwise -1 if failed
  */
 
-int execute_arg(env_t **envlist, char **arg, char *path)
+int execute_arg(__attribute__((unused))env_t **envlist, char **arg, char *path)
 {
 	pid_t child_pid;
 	int status;
-	int checkretval;
 
-	checkretval = check_builtin(arg, envlist);
-	if (checkretval == 1)
-		return (1);
 	child_pid = fork();
 	if (child_pid == -1)
 	{
 		perror("hsh error - child is -1");
-		return (-1);
+		exit(-1);
 	}
 	if (child_pid == 0)
 	{
-		execve(path, arg, environ);
-		exit(EXIT_SUCCESS);
+		if((execve(path, arg, environ)) == -1)
+		{
+			perror("hsh");
+			exit(EXIT_FAILURE);
+			return (0);
+		}
 	}
 	else
 		wait(&status);

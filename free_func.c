@@ -30,11 +30,25 @@ void freeenvlist(env_t **envlist)
 void free_dblechar(char **arr)
 {
 	int i = 0;
+	int size;
 
+	size = arr_size(arr);
 	while (arr[i] != NULL)
 	{
 		free(arr[i]);
 		i++;
 	}
 	free(arr);
+}
+
+int arr_size(char **arr)
+{
+	int i;
+
+	if (arr == NULL || *arr == NULL)
+		return (-1);
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
 }
