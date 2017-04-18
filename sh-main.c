@@ -32,7 +32,7 @@ int main(void)
 
 void prompt_user(env_t **envlist, char **patharr)
 {
-	size_t n;
+	size_t n = 20;
 	int retval = 1, pipe = 0, retval2 = 0;
 	char *path, *path2, *line = NULL;
 	char **arg;
@@ -50,9 +50,14 @@ void prompt_user(env_t **envlist, char **patharr)
 		break;
 	}
 	if (pipe == 0)
-		printf("$ ");
+		write(1, "$ ", 2);
+
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
+	/*
+	while ((retval = _getline(&line, &n)) != -1)
+	{
+	*/
 		if (line[0] == 10)
 		{
 			write(1, "$ ", 2);
@@ -71,14 +76,12 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval2 == 1)
 		{
 			execute_arg(envlist, arg, path2);
-			free(path);
 			free(path2);
 		}
 		else
 		{
 			execute_arg(envlist, arg, path);
 			free(path);
-
 		}
 		if (arg != NULL)
 			free(arg);
@@ -138,12 +141,9 @@ int check_builtin(char **arg, env_t **envlist)
 	int i;
 
 	bt_t builtin[] = {
-		{"cd", exec_cd},
-		{"env", exec_env},
-		{"exit", exec_exit},
-		{"setenv", exec_setenv},
-		{"unsetenv", exec_unsetenv},
-		{"\n", exec_nl},
+		{"cd", exec_cd}, {"env", exec_env},
+		{"exit", exec_exit}, {"setenv", exec_setenv},
+		{"unsetenv", exec_unsetenv}, {"\n", exec_nl},
 		{NULL, NULL}
 	};
 	for (i = 0; builtin[i].builtin != NULL; i++)

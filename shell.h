@@ -115,6 +115,11 @@ int _strlen(const char *s);
 char *_strdup(char *str);
 char *_strcpy(char *dest, char *src);
 int _strcmp(char *s1, char *s2);
+
+/**
+ * getline.c
+ */
+int _getline(char **lineptr, size_t *a);
 /**
  * other functions
  */
