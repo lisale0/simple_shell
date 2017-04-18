@@ -16,13 +16,21 @@ Simple Recreation of command-line shell.
 |  `path.c`	|  Implements the PATH	       		|
 
 ### How to Use
-* Clone repo
+Clone repo
 ```
 git clone https://github.com/lisale0/simple_shell.git
 ```
 Compile all the `.c` files in /simple_shell
 ```
 gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
+```
+Run executable
+```
+./hsh
+```
+Once the program is running, type commands avaiable within the shell
+```
+$ ls
 ```
 ### Function and System Calls Utilized
 * `access`
