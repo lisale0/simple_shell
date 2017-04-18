@@ -51,3 +51,48 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 	free(ptr);
 	return (newptr);
 }
+
+void set_pathvar(env_t **envlist, char *oldpath, char *currentpath)
+{
+
+	env_t *temp;
+	int oldlen, newlen;
+
+	temp = *envlist;
+	while (temp != NULL)
+	{
+		if (_strcmp(temp->key, "PWD") == 0)
+		{
+			printf("found %s\n", temp->key);
+			printf("value before change: %s\n", temp->value);
+			printf("value to change to: %s\n", oldpath);
+			oldlen = _strlen(temp->value) + 1;
+			newlen = _strlen(oldpath) + 1;
+			printf("oldlen: %d newlen %d\n", oldlen, newlen);
+
+
+			temp->value = _realloc(temp->value, oldlen, newlen);
+/*
+			printf("%d\n", _strlen(temp->value));
+
+			_strcpy(temp->value, oldpath);
+
+
+			printf("value after change: %s\n", temp->value);
+*/
+		}
+		/*
+		if (_strcmp(temp->key, "OLDPWD") == 0)
+		{
+			printf("found %s\n", temp->key);
+			printf("value before change: %s\n", temp->value);
+			oldlen = _strlen(temp->value) + 1;
+                        newlen = _strlen(oldpath) + 1;
+			_realloc(temp->value, oldlen, newlen);
+			_strcpy(temp->value, currentpath);
+			printf("value after change: %s\n", temp->value);
+		}
+		*/
+		temp = temp->next;
+	}
+}

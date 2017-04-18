@@ -87,6 +87,7 @@ void prompt_user(env_t **envlist, char **patharr)
 			free(arg);
 		if (pipe == 0)
 			write(1, "$ ", 2);
+		free(path);
 	}
 	free(line);
 }

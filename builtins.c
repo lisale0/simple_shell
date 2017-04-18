@@ -4,9 +4,7 @@
 int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char *cmd, char **arg)
 {
 	env_t *temp, *temp2;
-	char *oldpath;
-	char currentpath[1024];
-
+	char *oldpath, *currentpath;
 	size_t cwdlen = 0;
 
         if (arg[1] == NULL)
@@ -17,38 +15,35 @@ int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char 
 		{
 			printf("hello\n");
 			temp = _getenv(*envlist, "OLDPWD");
-			oldpath = malloc((_strlen(temp->value) + 1)
+			oldpath = malloc((_strlen(temp->value) + 2)
 					 * sizeof(char));
 			if (oldpath == NULL)
 				return (-1);
 			temp2 = _getenv(*envlist, "PWD");
-			cwdlen = (size_t)_strlen(temp2->value);
+			cwdlen = (size_t)_strlen(temp2->value) + 1;
 
 			/*printf("PWD %s\n", temp2->value);*/
-			/*
-			currentpath = malloc((cwdlen + 1)
+			currentpath = malloc((cwdlen + 2)
 					     * sizeof(char));
 			if (currentpath == NULL)
 			{
 				free(oldpath);
 				return (-1);
 			}
-			*/
 			/*getting the old path so I can change to that*/
+
 			oldpath = strcpy(oldpath, temp->value);
-	        	if (getcwd(currentpath, cwdlen) != NULL)
+
+	        	if (getcwd(currentpath, cwdlen) == NULL)
 			{
-                                printf("Current working dir: %s\n", currentpath);
-				return (-1);;
+				perror("cd fail");
 			}
+
 			if ((chdir(oldpath)) == 0)
 			{
-				/*oldpath = _realloc(oldpath, _strlen(oldpath));*/
-				/*PWD is not oldpath*/
-				_strcpy(temp2->value, oldpath);
-				/*change OLDPWD to currentpath*/
-				_strcpy(temp->value, currentpath);
+				set_pathvar(envlist, oldpath, currentpath);
 			}
+
 			return (1);
 		}
                 if (chdir(arg[1]) != 0)
@@ -58,7 +53,8 @@ int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char 
 }
 int exec_exit(__attribute__((unused)) env_t **envlist, __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg)
 {
-	return (0);
+	_exit(EXIT_SUCCESS);
+	return (1);
 }
 int exec_env(env_t **envlist,
 __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg)
