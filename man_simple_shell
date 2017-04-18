@@ -40,7 +40,8 @@ execute.
 .PP
 .B exit
 - exit the shell, returning a status
-.IT
+.SH SEE ALSO
+bash(1), sh(1)
 .SH BUGS
 No known bugs.
 .SH AUTHOR
