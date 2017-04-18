@@ -52,7 +52,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 	return (newptr);
 }
 
-void set_pathvar(env_t **envlist, char *oldpath, char *currentpath)
+void set_pathvar(env_t **envlist, char *oldpath, __attribute__((unused))char *currentpath)
 {
 
 	env_t *temp;

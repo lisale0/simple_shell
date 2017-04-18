@@ -32,9 +32,10 @@ int main(void)
 
 void prompt_user(env_t **envlist, char **patharr)
 {
-	size_t n = 20;
-	int retval = 1, pipe = 0, retval2 = 0;
-	char *path, *path2, *line = NULL;
+	size_t n;
+	int retval = 1, pipe = 0;
+	char *path;
+	char *line = NULL;
 	char **arg;
 	struct stat sb;
 
@@ -43,6 +44,9 @@ void prompt_user(env_t **envlist, char **patharr)
 		perror("stat");
 		exit(EXIT_FAILURE);
 	}
+	/**
+	 *determine if this is a non-interactive mode
+	 */
 	switch (sb.st_mode & S_IFMT)
 	{
 	case S_IFIFO:
@@ -50,14 +54,9 @@ void prompt_user(env_t **envlist, char **patharr)
 		break;
 	}
 	if (pipe == 0)
-		write(1, "$ ", 2);
-
+		printf("$ ");
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
-	/*
-	while ((retval = _getline(&line, &n)) != -1)
-	{
-	*/
 		if (line[0] == 10)
 		{
 			write(1, "$ ", 2);
@@ -66,25 +65,23 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		if (arg[0][0] == '.' && arg[0][1] == '/')
-			path = _strdup(strtok(arg[0], "./"));
-		else if (access(arg[0], X_OK) == 0 &&
-			 !(build_path(arg[0], patharr, &path)))
+		/*
+		  if (access(arg[0], X_OK) == 0 && !(build_path(arg[0], patharr, &path)))
+		*/
+
+		/*if /bin/ls exists, then take this as a path*/
+		if (access(arg[0], X_OK) == 0)
+		{
 			path = _strdup(arg[0]);
-		else
-			retval2 = build_path(arg[0], patharr, &path2);
-		if (retval2 == 1)
-		{
-			execute_arg(envlist, arg, path2);
-			free(path2);
 		}
+		/*otherwise build it out using the PATH environment*/
 		else
-		{
-			execute_arg(envlist, arg, path);
-			free(path);
-		}
+			build_path(arg[0], patharr, &path);
+		execute_arg(envlist, arg, path);
 		if (arg != NULL)
+		{
 			free(arg);
+		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
 		free(path);
