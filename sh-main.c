@@ -19,7 +19,6 @@ int main(void)
 	prompt_user(&envlist, patharr);
 	free_dblechar(patharr);
 	freeenvlist(&envlist);
-	printf("hello world");
 	return (0);
 }
 
@@ -70,18 +69,23 @@ void prompt_user(env_t **envlist, char **patharr)
                 if (checkretval == 1)
                 {
                         write(1, "$ ", 2);
+			free(arg);
                         continue;
                 }
 		if (access(arg[0], F_OK) == 0)
 		{
                         execute_arg(envlist, arg, arg[0]);
+			free(arg);
+			continue;
 		}
 		/*otherwise build it out using the PATH environment*/
 		else
 			buildret = build_path(arg[0], patharr, &path);
 
 		if (buildret == 1)
+		{
 			execute_arg(envlist, arg, path);
+		}
 		else
 		{
 			write(1, "$ ", 2);
@@ -89,8 +93,8 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
-		free(path);
 		free(arg);
+		free(path);
 	}
 	free(line);
 }
