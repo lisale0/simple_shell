@@ -1,7 +1,15 @@
-## Simple Shell
+# Simple Shell
 ### Description
-Simple Recreation of command-line shell.
+Recreation of command-line interpreter (shell) mirroring the functionality
+of `sh` in a limited scope.
+### Synopsis
+This version of the shell has a collection of custom built-in comannds along
+with the functionality of running scripts in the `/bin` folder.
+### Environment
+This program was designed to be compiled with `gcc 4.84` and run in
+Ubuntu 14.04 LTS
 
+Tests done in VirtualBox on Ubuntu via Vagrant
 ## Repo Contents
 
 |   **File**    |  **Decription**                       |
