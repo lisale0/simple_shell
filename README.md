@@ -41,33 +41,10 @@ Once the program is running, type commands avaiable within the shell
 $ ls
 ```
 ### Function and System Calls Utilized
-* `access`
-* `chdir`
-* `close`
-* `closedir`
-* `execve`
-* `exit`
-* `fork`
-* `free`
-* `fstat`
-* `getcwd`
-* `getline`
-* `kill`
-* `lstat`
-* `malloc`
-* `open`
-* `opendir`
-* `perror`
-* `read`
-* `readdir`
-* `signal`
-* `stat`
-* `wait`
-* `waitpid`
-* `wait3`
-* `wait4`
-* `write`
-* `_exit`
+ `access`, `chdir`, `close`, `closedir`, `execve`, `exit`, `fork`, `free`,
+`fstat`, `getcwd`, `getline`, `kill`, `lstat`, `malloc`, `open`, `opendir`,
+`perror`, `read`, `readdir`, `signal`, `stat`, `wait`, `waitpid`, `wait3`,
+`wait4`, `write`, `_exit`
 ### Authors
 *Lisa Leung* - [Github](https://github.com/lisale0) || [Twitter](https://twitter.com/lisale01) || [email](lisa.leung@holbertonschool.com)
 
