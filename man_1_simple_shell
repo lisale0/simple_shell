@@ -1,0 +1,46 @@
+.TH simple_shell "17 April 2017" "0.1" "simple_shell man page"
+.SH NAME
+.B simple_shell - command-line interpreter
+.SH SYNOPSIS
+.B  ./hsh
+.PP
+.SH DESCRIPTION
+Recreation of the shell command-line interpreter. Users have the ability to
+directly operate with the computer via text commands.
+.PP
+.SH Overview
+The shell is a command that reads lines from either a file or the terminal,
+interprets them, and generally executes other commands. Commands can be typed
+directly to the running shell or can be put into a file and teh file can be
+executed directly by the shell.
+.SH Invocation
+Interactive vs Non-interactive mode
+
+.SH BUILT-IN COMMANDS
+.RS information on built-in commands
+.PP
+.B env
+- writes environmental variable
+.PP
+.B getenv
+- get an environmental variable
+.PP
+.B setenv
+- change or add an environmental variable
+.PP
+.B unsetenv
+- deletes the variable name from the environment
+.PP
+.B cd
+- changes directory
+.PP
+.B exit
+- exit the shell, returning a status
+.SH SEE ALSO
+bash(1), sh(1)
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Joe McDaniel <joseph.mcdaniel@holbertonschool.com>
+.PP
+Lisa Leung  <lisa.leung@holbertonschool.com>
