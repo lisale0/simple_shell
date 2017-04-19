@@ -38,3 +38,15 @@ void free_dblechar(char **arr)
 	}
 	free(arr);
 }
+
+int arr_size(char **arr)
+{
+	int i;
+
+	if (arr == NULL || *arr == NULL)
+		return (-1);
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}

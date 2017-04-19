@@ -32,9 +32,9 @@ int main(void)
 
 void prompt_user(env_t **envlist, char **patharr)
 {
-	size_t n = 20;
-	int retval = 1, pipe = 0, retval2 = 0;
-	char *path, *path2, *line = NULL;
+	size_t n;
+	int retval = 1, pipe = 0;
+	char *line = NULL;
 	char **arg;
 	struct stat sb;
 
@@ -50,44 +50,26 @@ void prompt_user(env_t **envlist, char **patharr)
 		break;
 	}
 	if (pipe == 0)
-		write(1, "$ ", 2);
-
+		printf("$ ");
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
-	/*
-	while ((retval = _getline(&line, &n)) != -1)
-	{
-	*/
-		if (line[0] == 10)
-		{
-			write(1, "$ ", 2);
+		if (check_space(line[0]) == 1)
 			continue;
-		}
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		if (arg[0][0] == '.' && arg[0][1] == '/')
-			path = _strdup(strtok(arg[0], "./"));
-		else if (access(arg[0], X_OK) == 0 &&
-			 !(build_path(arg[0], patharr, &path)))
-			path = _strdup(arg[0]);
-		else
-			retval2 = build_path(arg[0], patharr, &path2);
-		if (retval2 == 1)
+		if (check_exit(arg[0], &arg, &line) == 1)
+			return;
+		if (check_builtin(&arg, envlist) == 1)
+			continue;
+		if (execute_cmd(envlist, &arg, patharr) == 1)
 		{
-			execute_arg(envlist, arg, path2);
-			free(path2);
+			continue;
 		}
-		else
-		{
-			execute_arg(envlist, arg, path);
-			free(path);
-		}
-		if (arg != NULL)
-			free(arg);
+		perror("hsh");
 		if (pipe == 0)
 			write(1, "$ ", 2);
-		free(path);
+		free(arg);
 	}
 	free(line);
 }
@@ -131,32 +113,7 @@ char **split_line(char *line)
 	tokens[i] = NULL;
 	return (tokens);
 }
-/**
- * check_builtin - check if the command is a builtin
- * @arg: the arguments passed in from user
- *
- * Return: 1 if builtin command, 0 otherwise
- */
-int check_builtin(char **arg, env_t **envlist)
-{
-	int i;
 
-	bt_t builtin[] = {
-		{"cd", exec_cd}, {"env", exec_env},
-		{"exit", exec_exit}, {"setenv", exec_setenv},
-		{"unsetenv", exec_unsetenv}, {"\n", exec_nl},
-		{NULL, NULL}
-	};
-	for (i = 0; builtin[i].builtin != NULL; i++)
-	{
-		if (arg[0] && _strcmp(arg[0], builtin[i].builtin) == 0)
-		{
-			builtin[i].f(envlist, arg[0], arg);
-			return (1);
-		}
-	}
-	return (0);
-}
 /**
  * execute_arg - execute the arguments passed in
  * @envlist: linkedlist envlist
@@ -166,25 +123,25 @@ int check_builtin(char **arg, env_t **envlist)
  * Return: 1 if passed, otherwise -1 if failed
  */
 
-int execute_arg(env_t **envlist, char **arg, char *path)
+int execute_arg(__attribute__((unused))env_t **envlist, char **arg, char *path)
 {
 	pid_t child_pid;
 	int status;
-	int checkretval;
 
-	checkretval = check_builtin(arg, envlist);
-	if (checkretval == 1)
-		return (1);
 	child_pid = fork();
 	if (child_pid == -1)
 	{
 		perror("hsh error - child is -1");
-		return (-1);
+		exit(-1);
 	}
 	if (child_pid == 0)
 	{
-		execve(path, arg, environ);
-		exit(EXIT_SUCCESS);
+		if ((execve(path, arg, environ)) == -1)
+		{
+			perror("hsh");
+			exit(EXIT_FAILURE);
+			return (0);
+		}
 	}
 	else
 		wait(&status);
