@@ -46,8 +46,7 @@ int check_builtin(char ***arg, env_t **envlist)
 
 	bt_t builtin[] = {
 		{"cd", exec_cd}, {"env", exec_env},
-		{"exit", exec_exit}, {"setenv", exec_setenv},
-		{"unsetenv", exec_unsetenv},
+		{"setenv", exec_setenv}, {"unsetenv", exec_unsetenv},
 		{NULL, NULL}
 	};
 	for (i = 0; builtin[i].builtin != NULL; i++)
@@ -66,9 +65,9 @@ int check_builtin(char ***arg, env_t **envlist)
  * execute_cmd - execute the command
  * @envlist: the envlist
  * @arg: the arguments
- * @cmd: commands
  * @patharr: the paths
- *
+ * @pipe: used to keep track if it is non interactive
+ * if it is interactive, write $ to prompt
  * Return: 1 success, 0 fail
  */
 int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe)

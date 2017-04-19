@@ -1,33 +1,23 @@
 #include "shell.h"
 #include <stdio.h>
 
-int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char *cmd, char **arg)
+/**
+ * exec_cd - called by function pointer
+ * executes the builtin cd
+ * @envlist: the linkedlist of environment variables
+ * @cmd: command
+ * @arg: the arguments for cd
+ *
+ * Return: 1 success, 0 fail
+ */
+int exec_cd(__attribute__((unused))env_t **envlist,
+	    __attribute__((unused))char *cmd, char **arg)
 {
 	env_t *temp, *temp2, *home;
 	char *oldpath, *currentpath;
 	size_t cwdlen = 0;
 
-	temp = _getenv(*envlist, "OLDPWD");
-	oldpath = malloc((_strlen(temp->value) + 2)
-			 * sizeof(char));
-	if (oldpath == NULL)
-		return (-1);
-	temp2 = _getenv(*envlist, "PWD");
-	cwdlen = (size_t)_strlen(temp2->value) + 1;
-	currentpath = malloc((cwdlen + 2)
-			     * sizeof(char));
-	if (currentpath == NULL)
-	{
-		free(oldpath);
-		return (-1);
-	}
-	oldpath = _strcpy(oldpath, temp->value);
-
-	if (getcwd(currentpath, cwdlen) == NULL)
-	{
-		perror("cd fail");
-	}
-
+	build_cdpaths(envlist, &temp, &temp2, &oldpath, &currentpath, &cwdlen);
 	if (arg[1] == NULL)
 	{
 		home = _getenv(*envlist, "HOME");
@@ -43,17 +33,21 @@ int exec_cd(__attribute__((unused))env_t **envlist, __attribute__((unused))char 
 			}
 
 		}
-        }
+	}
 	free(oldpath);
 	free(currentpath);
-        return (1);
-}
-
-int exec_exit(__attribute__((unused)) env_t **envlist, __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg)
-{
-	_exit(EXIT_SUCCESS);
 	return (1);
 }
+
+/**
+ * exec_env - called by function pointer
+ * executes the builtin env
+ * @envlist: the linkedlist of environment variables
+ * @cmd: command
+ * @arg: the arguments for cd
+ *
+ * Return: 1 success, 0 fail
+ */
 int exec_env(env_t **envlist,
 __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg)
 {
@@ -65,6 +59,16 @@ __attribute__((unused)) char *cmd, __attribute__((unused)) char **arg)
 	print_listenv(*envlist);
 	return (1);
 }
+
+/**
+ * exec_setenv - called by function pointer
+ * executes the builtin setenv
+ * @envlist: the linkedlist of environment variables
+ * @cmd: command
+ * @arg: the arguments for cd
+ *
+ * Return: 1 success, 0 fail
+ */
 int exec_setenv(env_t **envlist, __attribute__((unused)) char *cmd, char **arg)
 {
 	char *name, *value;
@@ -87,12 +91,23 @@ int exec_setenv(env_t **envlist, __attribute__((unused)) char *cmd, char **arg)
 	_strcpy(value, arg[2]);
 	_strcat(value, "\0");
 	_strcat(name, "\0");
-	_setenv(envlist,name, value);
+	_setenv(envlist, name, value);
 	free(name);
 	free(value);
 	return (0);
 }
-int exec_unsetenv(env_t **envlist, __attribute__((unused)) char *cmd, char **arg)
+
+/**
+ * exec_unsetenv - called by function pointer
+ * executes the builtin unsetenv
+ * @envlist: the linkedlist of environment variables
+ * @cmd: command
+ * @arg: the arguments for cd
+ *
+ * Return: 1 success, 0 fail
+ */
+int exec_unsetenv(env_t **envlist,
+		  __attribute__((unused)) char *cmd, char **arg)
 {
 	if (arg[1] == NULL)
 	{

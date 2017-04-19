@@ -61,6 +61,7 @@ int _setenv(env_t **envlist, char *name, char *value)
 		env = _strcat(env, value);
 		add_nodeenv_end(envlist, env);
 		free(env);
+		return (1);
 	}
 	return (-1);
 }

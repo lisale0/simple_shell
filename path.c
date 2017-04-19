@@ -74,27 +74,3 @@ int build_path(char *cmd, char **parsedpaths, char **path)
 	}
 	return (0);
 }
-
-/**
- * check_cwdex - check if the executable is in CWD
- * @cmd: the command to check against
- *
- * Return: int, 1 if success
- *
- */
-int check_cwdex(char *cmd)
-{
-	char *delim = "./ ";
-	char *token;
-
-	token = strtok(cmd, delim);
-	if (cmd[0] == '.' && cmd[1] == '/')
-	{
-		if (access(token, X_OK) == 0)
-		{
-
-			return (1);
-		}
-	}
-	return (0);
-}

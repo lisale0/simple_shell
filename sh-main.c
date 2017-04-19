@@ -63,9 +63,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (check_builtin(&arg, envlist) == 1)
 			continue;
 		if (execute_cmd(envlist, &arg, patharr, pipe) == 1)
-		{
 			continue;
-		}
 		perror("hsh");
 		if (pipe == 0)
 			write(1, "$ ", 2);

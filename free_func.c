@@ -39,6 +39,12 @@ void free_dblechar(char **arr)
 	free(arr);
 }
 
+/**
+ * arr_size - gets the size of an array
+ * @arr: the array to check against
+ *
+ * Return: int, size of array
+ */
 int arr_size(char **arr)
 {
 	int i;
