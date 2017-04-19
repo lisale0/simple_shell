@@ -66,9 +66,9 @@ void prompt_user(env_t **envlist, char **patharr)
 		{
 			continue;
 		}
-		if (pipe == 0)
-			write(1, "$ ", 2);
 		perror("hsh");
+		if (pipe == 0)
+                        write(1, "$ ", 2);
 		free(arg);
 	}
 	free(line);
