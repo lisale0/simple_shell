@@ -33,7 +33,7 @@ int main(void)
 void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
-	int retval = 1, pipe = 0, checkretval = 0, buildret = 0;
+	int retval = 1, pipe = 0, buildret = 0;
 	char *path, *line = NULL;
 	char **arg;
 	struct stat sb;
@@ -53,30 +53,17 @@ void prompt_user(env_t **envlist, char **patharr)
 		printf("$ ");
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
-		if (line[0] == 10)
-		{
-			write(1, "$ ", 2);
+		if (check_space(line[0]) == 1)
 			continue;
-		}
 		if (retval < 0)
 			break;
 		arg = split_line(line);
 		if (check_exit(arg[0], &arg, &line) == 1)
 			return;
-		/*
-		if(check_exit(arg[0]) == 1)
-		{
-			free(arg);
-			free(line);
-			return;
-		}
-		*/
-		checkretval = check_builtin(arg, envlist);
-                if (checkretval == 1)
-		{
-                        write(1, "$ ", 2); free(arg);
+		if (check_builtin(&arg, envlist) == 1)
 			continue;
-		}
+
+		
 		if (access(arg[0], F_OK) == 0)
 		{
                         execute_arg(envlist, arg, arg[0]); write(1, "$ ", 2);
@@ -139,32 +126,7 @@ char **split_line(char *line)
 	tokens[i] = NULL;
 	return (tokens);
 }
-/**
- * check_builtin - check if the command is a builtin
- * @arg: the arguments passed in from user
- *
- * Return: 1 if builtin command, 0 otherwise
- */
-int check_builtin(char **arg, env_t **envlist)
-{
-	int i;
 
-	bt_t builtin[] = {
-		{"cd", exec_cd}, {"env", exec_env},
-		{"exit", exec_exit}, {"setenv", exec_setenv},
-		{"unsetenv", exec_unsetenv}, {"\n", exec_nl},
-		{NULL, NULL}
-	};
-	for (i = 0; builtin[i].builtin != NULL; i++)
-	{
-		if (arg[0] && _strcmp(arg[0], builtin[i].builtin) == 0)
-		{
-			builtin[i].f(envlist, arg[0], arg);
-			return (1);
-		}
-	}
-	return (0);
-}
 /**
  * execute_arg - execute the arguments passed in
  * @envlist: linkedlist envlist

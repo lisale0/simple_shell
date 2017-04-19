@@ -62,7 +62,7 @@ void set_envlist(env_t **envlist);
 void prompt_user(env_t **envlist, char **patharr);
 char **split_line(char *line);
 int execute_arg(env_t **envlist, char **arg, char *path);
-int check_builtin(char **arg, env_t **envlist);
+int check_builtin(char ***arg, env_t **envlist);
 
 /**
  * get, set, and unset env, manipulation of nodes in the link [env_cmd.c]
@@ -133,4 +133,5 @@ void set_pathvar(env_t **envlist, char *oldpath, char *currentpath);
 char **envl_to_dptr(env_t **envlist);
 int arr_size(char **arr);
 int check_exit(char *cmd, char ***arg, char **line);
+int check_space(int cmd);
 #endif
