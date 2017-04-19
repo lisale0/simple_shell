@@ -89,18 +89,20 @@ int _unsetenv(env_t **envlist, char *name)
 		}
 		if (temp->next == NULL)
 		{
-			perror("env does not exist");
+			perror("hsh");
 			return (-1);
 		}
 		if (_strcmp((temp->next)->key, name) == 0)
 		{
 			deleteNode = temp->next;
 			temp->next = deleteNode->next;
+			free(deleteNode->key);
+			free(deleteNode->value);
 			free(deleteNode);
 			return (1);
 		}
 		temp = temp->next;
 	}
-	perror("Path name does not exist");
+	perror("hsh");
 	return (-1);
 }

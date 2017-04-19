@@ -129,4 +129,6 @@ char **envl_to_dptr(env_t **envlist);
 int arr_size(char **arr);
 int check_exit(char *cmd, char ***arg, char **line);
 int check_space(int cmd);
+void set_homepath(env_t **envlist, char *oldpath,
+                  __attribute__((unused))char *currentpath);
 #endif

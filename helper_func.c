@@ -78,3 +78,22 @@ void set_pathvar(env_t **envlist, char *oldpath,
 		temp = temp->next;
 	}
 }
+void set_homepath(env_t **envlist, char *oldpath,
+		  __attribute__((unused))char *currentpath)
+{
+	env_t *temp;
+	int oldlen, newlen;
+
+        temp = *envlist;
+	while (temp != NULL)
+	{
+		if (_strcmp(temp->key, "PWD") == 0)
+                {
+                        oldlen = _strlen(temp->value) + 1;
+			newlen = _strlen(oldpath) + 1;
+			_realloc(temp->value, oldlen, newlen);
+                        _strcpy(temp->value, oldpath);
+		}
+		temp = temp->next;
+	}
+}
