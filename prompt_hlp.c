@@ -63,11 +63,49 @@ int check_builtin(char ***arg, env_t **envlist)
         return (0);
 }
 
-int execute_cmd(env_t **envlist, char **arg, char *cmd)
+int execute_cmd(env_t **envlist, char **arg, char *cmd, char **patharr)
 {
+	char *a;
+	int retval2;
+	char *path;
+	char *path2;
+
 	/**if executable and not ./ in cwd**/
-	if (access(cmd, X_OK) == 0 && (cmd[0] != '.' && cmd[1] != '/'))
+	if (cmd[0] == '.' && cmd[1] == '/')
 	{
-		
+		printf("./");
+		a = strtok(cmd, "./");
+		if (access(a, X_OK) == 0)
+		{
+			execute_arg(envlist, arg, a);
+			return (1);
+		}
+		return (0);
+	}
+	else if(access(cmd, F_OK) == 0 && !(build_path(arg[0], patharr, &path)))
+	{
+		printf("heff");
+		execute_arg(envlist, arg, cmd);
+		free(arg);
+		free(path);
+		return (1);
+	}
+	else
+	{
+		printf("hello");
+		retval2 = build_path(arg[0], patharr, &path2);
+		if (retval2 == 1)
+		{
+			execute_arg(envlist, arg, path2);
+			free(path2);
+			free(arg);
+			return (1);
+		}
+		else
+		{
+			write(1, "$ ", 2);
+			return (0);
+		}
+
 	}
 }
