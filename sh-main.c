@@ -34,8 +34,7 @@ void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
 	int retval = 1, pipe = 0, checkretval = 0, buildret = 0;
-	char *path;
-	char *line = NULL;
+	char *path, *line = NULL;
 	char **arg;
 	struct stat sb;
 
@@ -44,9 +43,6 @@ void prompt_user(env_t **envlist, char **patharr)
 		perror("stat");
 		exit(EXIT_FAILURE);
 	}
-	/**
-	 *determine if this is a non-interactive mode
-	 */
 	switch (sb.st_mode & S_IFMT)
 	{
 	case S_IFIFO:
@@ -65,27 +61,33 @@ void prompt_user(env_t **envlist, char **patharr)
 		if (retval < 0)
 			break;
 		arg = split_line(line);
+		if (check_exit(arg[0], &arg, &line) == 1)
+			return;
+		/*
+		if(check_exit(arg[0]) == 1)
+		{
+			free(arg);
+			free(line);
+			return;
+		}
+		*/
 		checkretval = check_builtin(arg, envlist);
                 if (checkretval == 1)
-                {
-                        write(1, "$ ", 2);
-			free(arg);
-                        continue;
-                }
+		{
+                        write(1, "$ ", 2); free(arg);
+			continue;
+		}
 		if (access(arg[0], F_OK) == 0)
 		{
-                        execute_arg(envlist, arg, arg[0]);
+                        execute_arg(envlist, arg, arg[0]); write(1, "$ ", 2);
 			free(arg);
 			continue;
 		}
-		/*otherwise build it out using the PATH environment*/
 		else
 			buildret = build_path(arg[0], patharr, &path);
 
 		if (buildret == 1)
-		{
 			execute_arg(envlist, arg, path);
-		}
 		else
 		{
 			write(1, "$ ", 2);
@@ -93,8 +95,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
-		free(arg);
-		free(path);
+		free(arg); free(path);
 	}
 	free(line);
 }
