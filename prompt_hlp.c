@@ -71,7 +71,7 @@ int check_builtin(char ***arg, env_t **envlist)
  *
  * Return: 1 success, 0 fail
  */
-int execute_cmd(env_t **envlist, char ***arg, char **patharr)
+int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe)
 {
 	int buildret = 0;
 	char *path, *a;
@@ -80,15 +80,16 @@ int execute_cmd(env_t **envlist, char ***arg, char **patharr)
 	if (buildret == 1 && (*arg)[0][0] != '.')
 	{
 		execute_arg(envlist, *arg, path);
-		write(1, "$ ", 2);
-		free(path);
-		free(*arg);
+		if (pipe == 0)
+			write(1, "$ ", 2);
+		free(path); free(*arg);
 		return (1);
 	}
 	if (access((*arg)[0], F_OK) == 0 && (*arg)[0][0] != '.')
 	{
 		execute_arg(envlist, *arg, (*arg)[0]);
-		write(1, "$ ", 2);
+		if (pipe == 0)
+			write(1, "$ ", 2);
 		free(*arg);
 		return (1);
 	}
@@ -97,9 +98,9 @@ int execute_cmd(env_t **envlist, char ***arg, char **patharr)
 	{
 		a = strtok((*arg)[0], "./");
 		execute_arg(envlist, *arg, a);
-		free(path);
-		free(*arg);
-		write(1, "$ ", 2);
+		free(path); free(*arg);
+		if (pipe == 0)
+			write(1, "$ ", 2);
 		return (1);
 	}
 	return (0);

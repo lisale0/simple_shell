@@ -62,7 +62,7 @@ void prompt_user(env_t **envlist, char **patharr)
 			return;
 		if (check_builtin(&arg, envlist) == 1)
 			continue;
-		if (execute_cmd(envlist, &arg, patharr) == 1)
+		if (execute_cmd(envlist, &arg, patharr, pipe) == 1)
 		{
 			continue;
 		}
