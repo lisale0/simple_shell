@@ -61,7 +61,8 @@ typedef struct builtins
 void set_envlist(env_t **envlist);
 void prompt_user(env_t **envlist, char **patharr);
 char **split_line(char *line);
-int execute_arg(env_t **envlist, char **arg, char *path);
+int execute_cmd(env_t **envlist, char ***arg, char **patharr);
+int execute_arg(__attribute__((unused))env_t **envlist, char **arg, char *path);
 int check_builtin(char ***arg, env_t **envlist);
 
 /**
@@ -134,5 +135,4 @@ char **envl_to_dptr(env_t **envlist);
 int arr_size(char **arr);
 int check_exit(char *cmd, char ***arg, char **line);
 int check_space(int cmd);
-int execute_cmd(env_t **envlist, char **arg, char *cmd, char **patharr);
 #endif

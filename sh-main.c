@@ -33,8 +33,8 @@ int main(void)
 void prompt_user(env_t **envlist, char **patharr)
 {
 	size_t n;
-	int retval = 1, pipe = 0, buildret = 0;
-	char *path, *line = NULL, *a;
+	int retval = 1, pipe = 0;
+	char *line = NULL;
 	char **arg;
 	struct stat sb;
 
@@ -62,35 +62,14 @@ void prompt_user(env_t **envlist, char **patharr)
 			return;
 		if (check_builtin(&arg, envlist) == 1)
 			continue;
-		/*execute_cmd(envlist, arg, arg[0], patharr);*/
-		buildret = build_path(arg[0], patharr, &path);
-		if (buildret == 1 && arg[0][0] != '.')
-                {
-			execute_arg(envlist, arg, path);
-			write(1, "$ ", 2);
-			free(path);
-                        free(arg);
-                        continue;
-		}
-		if (access(arg[0], F_OK) == 0 && arg[0][0] != '.')
+		if (execute_cmd(envlist, &arg, patharr) == 1)
 		{
-                        execute_arg(envlist, arg, arg[0]); write(1, "$ ", 2);
-			free(arg);
-			continue;
-		}
-
-		if (arg[0][0] == '.' && arg[0][1] == '/')
-		{
-			a = strtok(arg[0], "./");
-			execute_arg(envlist, arg, a);
-			free(path);
-			free(arg);
 			continue;
 		}
 		if (pipe == 0)
 			write(1, "$ ", 2);
 		perror("hsh");
-		free(arg); /*free(path);*/
+		free(arg);
 	}
 	free(line);
 }

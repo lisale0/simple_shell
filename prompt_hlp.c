@@ -62,50 +62,45 @@ int check_builtin(char ***arg, env_t **envlist)
         }
         return (0);
 }
-
-int execute_cmd(env_t **envlist, char **arg, char *cmd, char **patharr)
+/**
+ * execute_cmd - execute the command
+ * @envlist: the envlist
+ * @arg: the arguments
+ * @cmd: commands
+ * @patharr: the paths
+ *
+ * Return: 1 success, 0 fail
+ */
+int execute_cmd(env_t **envlist, char ***arg, char **patharr)
 {
-	char *a;
-	int retval2;
-	char *path;
-	char *path2;
+	int buildret = 0;
+	char *path, *a;
 
-	/**if executable and not ./ in cwd**/
-	if (cmd[0] == '.' && cmd[1] == '/')
+	buildret = build_path((*arg)[0], patharr, &path);
+	if (buildret == 1 && (*arg)[0][0] != '.')
 	{
-		printf("./");
-		a = strtok(cmd, "./");
-		if (access(a, X_OK) == 0)
-		{
-			execute_arg(envlist, arg, a);
-			return (1);
-		}
-		return (0);
-	}
-	else if(access(cmd, F_OK) == 0 && !(build_path(arg[0], patharr, &path)))
-	{
-		printf("heff");
-		execute_arg(envlist, arg, cmd);
-		free(arg);
+		execute_arg(envlist, *arg, path);
+		write(1, "$ ", 2);
 		free(path);
+		free(*arg);
 		return (1);
 	}
-	else
+	if (access((*arg)[0], F_OK) == 0 && (*arg)[0][0] != '.')
 	{
-		printf("hello");
-		retval2 = build_path(arg[0], patharr, &path2);
-		if (retval2 == 1)
-		{
-			execute_arg(envlist, arg, path2);
-			free(path2);
-			free(arg);
-			return (1);
-		}
-		else
-		{
-			write(1, "$ ", 2);
-			return (0);
-		}
-
+		execute_arg(envlist, *arg, (*arg)[0]);
+		write(1, "$ ", 2);
+		free(*arg);
+		return (1);
 	}
+
+	if ((*arg)[0][0] == '.' && (*arg)[0][1] == '/')
+	{
+		a = strtok((*arg)[0], "./");
+		execute_arg(envlist, *arg, a);
+		free(path);
+		free(*arg);
+		write(1, "$ ", 2);
+		return (1);
+	}
+	return (0);
 }
