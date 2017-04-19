@@ -45,22 +45,22 @@ int check_builtin(char ***arg, env_t **envlist)
 	int i;
 
 	bt_t builtin[] = {
-                {"cd", exec_cd}, {"env", exec_env},
-                {"exit", exec_exit}, {"setenv", exec_setenv},
-                {"unsetenv", exec_unsetenv}, {"\n", exec_nl},
-                {NULL, NULL}
-        };
-        for (i = 0; builtin[i].builtin != NULL; i++)
-        {
-                if ((*arg)[0] && _strcmp((*arg)[0], builtin[i].builtin) == 0)
-                {
-                        builtin[i].f(envlist, (*arg)[0], *arg);
+		{"cd", exec_cd}, {"env", exec_env},
+		{"exit", exec_exit}, {"setenv", exec_setenv},
+		{"unsetenv", exec_unsetenv},
+		{NULL, NULL}
+	};
+	for (i = 0; builtin[i].builtin != NULL; i++)
+	{
+		if ((*arg)[0] && _strcmp((*arg)[0], builtin[i].builtin) == 0)
+		{
+			builtin[i].f(envlist, (*arg)[0], *arg);
 			write(1, "$ ", 2);
 			free(*arg);
-                        return (1);
-                }
-        }
-        return (0);
+			return (1);
+		}
+	}
+	return (0);
 }
 /**
  * execute_cmd - execute the command

@@ -123,12 +123,6 @@ int _strcmp(char *s1, char *s2);
  */
 int _getline(char **lineptr, size_t *a);
 
-/**
- * signal.c
- */
-/**
- * other functions
- */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 void set_pathvar(env_t **envlist, char *oldpath, char *currentpath);
 char **envl_to_dptr(env_t **envlist);

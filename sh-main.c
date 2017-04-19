@@ -68,7 +68,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		}
 		perror("hsh");
 		if (pipe == 0)
-                        write(1, "$ ", 2);
+			write(1, "$ ", 2);
 		free(arg);
 	}
 	free(line);
@@ -136,7 +136,7 @@ int execute_arg(__attribute__((unused))env_t **envlist, char **arg, char *path)
 	}
 	if (child_pid == 0)
 	{
-		if((execve(path, arg, environ)) == -1)
+		if ((execve(path, arg, environ)) == -1)
 		{
 			perror("hsh");
 			exit(EXIT_FAILURE);
