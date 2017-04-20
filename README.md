@@ -45,7 +45,7 @@ Once the program is running, type commands avaiable within the shell
 $ ls
 ```
 ### Interactive and Non-Interactive Mode
-In interactive mode input is accepted from the keyboard. This is typically the
+In interactive mode is character input is accepted from character input. This is typically the
 mode this project will be used in.
 ```
 $ echo "hello world"
@@ -55,16 +55,33 @@ However, the shell is designed to have the capability to run in non-interactive 
 
 In non-interactive mode, the shell is run from a script or something similar.
 The subshell only opens when the script is executed and subsequently closes
-once the script is finished. Invoking the shebang (`#!/bin/bash`) creates
-a non-interactive subshell.
+once the script is finished.
 ```
-$ cat non-script
-#!/bin/bash
-echo "cisfun"
+$ cat script
+ls -l
+$ cat script | ./hsh
+total 108
+-rw-r--r-- 1 vagrant vagrant   179 Apr 19 08:05 AUTHORS
+-rwxr-xr-x 1 vagrant vagrant  2837 Apr 20 03:36 README.md
+-rwxr-xr-x 1 vagrant vagrant  2471 Apr 19 22:13 builtins.c
+-rwxr-xr-x 1 vagrant vagrant  2123 Apr 20 03:28 env_cmd.c
+-rwxr-xr-x 1 vagrant vagrant  1866 Apr 20 03:29 env_list.c
+-rwxr-xr-x 1 vagrant vagrant   816 Apr 19 22:15 free_func.c
+-rwxr-xr-x 1 vagrant vagrant  3225 Apr 19 22:28 helper_func.c
+-rwxr-xr-x 1 vagrant vagrant 31912 Apr 19 22:24 hsh
+-rwxr--r-- 1 vagrant vagrant     6 Apr 20 04:13 ls
+-rwxr--r-- 1 vagrant vagrant    18 Apr 20 04:12 ls~
+-rw-r--r-- 1 vagrant vagrant  3648 Apr 20 03:36 man_1_simple_shell
+-rwxr-xr-x 1 vagrant vagrant  1594 Apr 19 18:26 path.c
+-rwxr-xr-x 1 vagrant vagrant  2210 Apr 19 22:30 prompt_hlp.c
+-rwxr-xr-x 1 vagrant vagrant  2674 Apr 19 18:25 sh-main.c
+-rwxr-xr-x 1 vagrant vagrant  4098 Apr 19 22:59 shell.h
+-rwxr-xr-x 1 vagrant vagrant  1639 Apr 19 08:05 str_hlp.c
+```
+```
+$ ./hsh
+$ ls -l
 
-$ chmod u+x nonscript
-$ ./non-script
-cisfun
 ```
 ### Builtins and commands
 Below are list of some of the more prominent commands used, for further
