@@ -54,8 +54,14 @@ once the script is finished.
 Below are list of some of the more prominent commands used, for further
 information refer to the man page `man ./man_1_simple_shell`
 
-Builtins: `cd` (change directory), `exit` (exit program)`,  `pwd` (print current working directory)
-Commands: `ls` (list directory contents), `cat` (concatenate files and print on stdout)
+Builtins:
+`cd` (change directory)
+`exit` (exit program)`
+`pwd` (print current working directory)
+
+Commands:
+`ls` (list directory contents)
+`cat` (concatenate files and print on stdout)
 
 ### Function and System Calls Utilized
  `access`, `chdir`, `close`, `closedir`, `execve`, `exit`, `fork`, `free`,
