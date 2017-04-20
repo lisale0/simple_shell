@@ -18,6 +18,9 @@
 #define BUFSIZE 1024
 #define TOKSIZE 64
 #define DELIM "\t\n\r\" "
+#define PS1 "$ "
+#define SUCCESS 1
+#define FAIL -1
 
 /**Global**/
 extern char **environ;
@@ -55,9 +58,10 @@ typedef struct builtins
 
 /** primary functions in main file [sh-main.c]**/
 void set_envlist(env_t **envlist);
-void prompt_user(env_t **envlist, char **patharr);
+void prompt_user(env_t **envlist, char **patharr, int pipe);
 char **split_line(char *line);
 int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe);
+void write_prompt();
 /**
  * execute_arg - primary function that calls execve
  * @envlist: the linked list used to grab values
@@ -127,6 +131,7 @@ int arr_size(char **arr);
 int check_exit(char *cmd, char ***arg, char **line);
 int check_space(int cmd);
 void set_homepath(env_t **envlist, char *oldpath);
+
 /**
  * build_cdpaths - builts out the paths for cd
  * @envlist: the linked list used to grab values

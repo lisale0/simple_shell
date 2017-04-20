@@ -1,6 +1,16 @@
 #include "shell.h"
 
 /**
+ * write_prompt - write to prompt for user input
+ *
+ * Return: none, void
+ */
+void write_prompt()
+{
+	write(1, PS1, 2);
+}
+
+/**
  * check_exit - check if the command is an exit
  * @cmd: the command passed in to check against
  * @arg: the arguments passed in to free
@@ -28,7 +38,7 @@ int check_space(int cmd)
 {
 	if (cmd == 10)
 	{
-		write(1, "$ ", 2);
+		write_prompt();
 		return (1);
 	}
 	return (0);
@@ -54,7 +64,7 @@ int check_builtin(char ***arg, env_t **envlist)
 		if ((*arg)[0] && _strcmp((*arg)[0], builtin[i].builtin) == 0)
 		{
 			builtin[i].f(envlist, (*arg)[0], *arg);
-			write(1, "$ ", 2);
+			write_prompt();
 			free(*arg);
 			return (1);
 		}
@@ -80,7 +90,7 @@ int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe)
 	{
 		execute_arg(envlist, *arg, path);
 		if (pipe == 0)
-			write(1, "$ ", 2);
+			write_prompt();
 		free(path); free(*arg);
 		return (1);
 	}
@@ -88,7 +98,7 @@ int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe)
 	{
 		execute_arg(envlist, *arg, (*arg)[0]);
 		if (pipe == 0)
-			write(1, "$ ", 2);
+			write_prompt();
 		free(*arg);
 		return (1);
 	}
@@ -99,7 +109,7 @@ int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe)
 		execute_arg(envlist, *arg, a);
 		free(path); free(*arg);
 		if (pipe == 0)
-			write(1, "$ ", 2);
+			write_prompt();
 		return (1);
 	}
 	return (0);

@@ -10,13 +10,26 @@ int main(void)
 	char **ep;
 	env_t *envlist = NULL;
 	char **patharr;
+	int pipe = 0;
+	struct stat sb;
 
 	for (ep = environ; *ep != NULL; ep++)
 	{
 		add_nodeenv_end(&envlist, *ep);
 	}
+        if (fstat(STDIN_FILENO, &sb) == -1)
+        {
+                perror("stat");
+                exit(EXIT_FAILURE);
+        }
+        switch (sb.st_mode & S_IFMT)
+        {
+        case S_IFIFO:
+                pipe = 1;
+                break;
+        }
 	patharr = parse_path(envlist);
-	prompt_user(&envlist, patharr);
+	prompt_user(&envlist, patharr, pipe);
 	free_dblechar(patharr);
 	freeenvlist(&envlist);
 	return (0);
@@ -30,43 +43,31 @@ int main(void)
  * Return: none
  */
 
-void prompt_user(env_t **envlist, char **patharr)
+void prompt_user(env_t **envlist, char **patharr, int pipe)
 {
 	size_t n;
-	int retval = 1, pipe = 0;
+	int retval = 1;
 	char *line = NULL;
 	char **arg;
-	struct stat sb;
 
-	if (fstat(STDIN_FILENO, &sb) == -1)
-	{
-		perror("stat");
-		exit(EXIT_FAILURE);
-	}
-	switch (sb.st_mode & S_IFMT)
-	{
-	case S_IFIFO:
-		pipe = 1;
-		break;
-	}
 	if (pipe == 0)
-		write(1, "$ ", 2);
+		write_prompt();
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
-		if (check_space(line[0]) == 1)
+		if (check_space(line[0]) == SUCCESS)
 			continue;
 		if (retval < 0)
 			break;
 		arg = split_line(line);
-		if (check_exit(arg[0], &arg, &line) == 1)
+		if (check_exit(arg[0], &arg, &line) == SUCCESS)
 			return;
-		if (check_builtin(&arg, envlist) == 1)
+		if (check_builtin(&arg, envlist) == SUCCESS)
 			continue;
-		if (execute_cmd(envlist, &arg, patharr, pipe) == 1)
+		if (execute_cmd(envlist, &arg, patharr, pipe) == SUCCESS)
 			continue;
 		perror("hsh");
 		if (pipe == 0)
-			write(1, "$ ", 2);
+			write_prompt();
 		free(arg);
 	}
 	free(line);
