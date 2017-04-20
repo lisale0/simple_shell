@@ -50,7 +50,7 @@ void prompt_user(env_t **envlist, char **patharr)
 		break;
 	}
 	if (pipe == 0)
-		printf("$ ");
+		write(1, "$ ", 2);
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
 		if (check_space(line[0]) == 1)
