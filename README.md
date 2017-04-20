@@ -1,4 +1,4 @@
-# Simple Shell
+# simple_shell
 ### Description
 This project is a recreation of the command-line interpreter (shell).
 In terms of functionality, it mirrors `sh` in a limited scope.
@@ -29,6 +29,10 @@ Clone repo
 ```
 git clone https://github.com/lisale0/simple_shell.git
 ```
+Change directory to simple_shell
+```
+cd simple_shell/
+```
 Compile all the `.c` files in /simple_shell
 ```
 gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
@@ -56,12 +60,12 @@ information refer to the man page - to access in your terminal type:
 ```
 man ./man_1_simple_shell
 ```
-####Builtins:
+#### Builtins:
 * `cd` (change directory)
 * `exit` (exit program)
 * `pwd` (print current working directory)
 
-####Commands:
+#### Commands:
 * `ls` (list directory contents)
 * `cat` (concatenate files and print on stdout)
 
