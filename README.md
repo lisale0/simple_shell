@@ -47,13 +47,26 @@ $ ls
 ```
 ### Interactive and Non-Interactive Mode
 In interactive mode input is accepted from the keyboard. This is typically the
-mode this project will be used in. However the shell is designed to have the
-capability to run in non-interactive mode.
+mode this project will be used in.
+```
+$ echo "hello world"
+hello world
+```
+However, the shell is designed to have the capability to run in non-interactive mode.
 
 In non-interactive mode, the shell is run from a script or something similar.
 The subshell only opens when the script is executed and subsequently closes
-once the script is finished.
+once the script is finished. Invoking the shebang (`#!/bin/bash`) creates
+a non-interactive subshell.
+```
+$ cat non-script
+#!/bin/bash
+echo "cisisfun"
 
+$ chmod u+x nonscript
+$ ./non-script
+cisfun
+```
 ### Builtins and commands
 Below are list of some of the more prominent commands used, for further
 information refer to the man page - to access in your terminal type:
