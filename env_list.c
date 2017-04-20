@@ -24,7 +24,7 @@ void add_nodeenv_end(env_t **envlist, char *env)
 	/**
 	 * need to fix this, there is a more elegant way to do this
 	 */
-	if (strcmp(key, "LS_COLORS") == 0)
+	if (_strcmp(key, "LS_COLORS") == 0)
 		value = strtok(NULL, "");
 	else
 		value = strtok(NULL, "=");
@@ -86,9 +86,9 @@ char *concat_env(char *key, char *value, int *len)
 
 	*len = _strlen(key) + _strlen(value) + 2;
 	env = malloc((*len) * sizeof(char));
-	env = strcpy(env, key);
-	env = strcat(env, "=");
-	env = strcat(env, value);
-	env = strcat(env, "\0");
+	env = _strcpy(env, key);
+	env = _strcat(env, "=");
+	env = _strcat(env, value);
+	env = _strcat(env, "\0");
 	return (env);
 }

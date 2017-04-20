@@ -56,7 +56,7 @@ int _setenv(env_t **envlist, char *name, char *value)
 	}
 	else
 	{
-		env = strcpy(env, name);
+		env = _strcpy(env, name);
 		env = _strcat(env, "=");
 		env = _strcat(env, value);
 		add_nodeenv_end(envlist, env);
