@@ -1,7 +1,7 @@
 # Simple Shell
 ### Description
-Recreation of command-line interpreter (shell) mirroring the functionality
-of `sh` in a limited scope.
+This project is a recreation of the command-line interpreter (shell).
+In terms of functionality, it mirrors `sh` in a limited scope.
 ### Synopsis
 This version of the shell has a collection of custom built-in comannds along
 with the functionality of running scripts in the `/bin` folder.
@@ -56,7 +56,7 @@ information refer to the man page `man ./man_1_simple_shell`
 
 Builtins:
 `cd` (change directory)
-`exit` (exit program)`
+`exit` (exit program)
 `pwd` (print current working directory)
 
 Commands:
