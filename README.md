@@ -36,14 +36,7 @@ Compile all the `.c` files in /simple_shell
 ```
 gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ```
-Run executable
-```
-./hsh
-```
-Once the program is running, type commands avaiable within the shell
-```
-$ ls
-```
+
 ### Interactive and Non-Interactive Mode
 In interactive mode is character input is accepted from character input.
 ```
