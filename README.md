@@ -22,7 +22,7 @@ Tests done in VirtualBox on Ubuntu via Vagrant
 |  `free_func.c`  |  Function to free memory		   |
 |  `helper_func.c`  | Helper functions: custom realloc   |
 |  `path.c`	|  Implements the PATH	       		|
-|  `prompt_hlp.c  | Prompt helper functions		|
+|  `prompt_hlp.c`  | Prompt helper functions		|
 
 ### How to Use
 Clone repo
@@ -50,18 +50,20 @@ In non-interactive mode, the shell is run from a script or something similar.
 The subshell only opens when the script is executed and subsequently closes
 once the script is finished.
 
-#### Builtins and commands
+### Builtins and commands
 Below are list of some of the more prominent commands used, for further
-information refer to the man page `man ./man_1_simple_shell`
+information refer to the man page - to access in your terminal type:
+```
+man ./man_1_simple_shell
+```
+####Builtins:
+* `cd` (change directory)
+* `exit` (exit program)
+* `pwd` (print current working directory)
 
-Builtins:
-`cd` (change directory)
-`exit` (exit program)
-`pwd` (print current working directory)
-
-Commands:
-`ls` (list directory contents)
-`cat` (concatenate files and print on stdout)
+####Commands:
+* `ls` (list directory contents)
+* `cat` (concatenate files and print on stdout)
 
 ### Function and System Calls Utilized
  `access`, `chdir`, `close`, `closedir`, `execve`, `exit`, `fork`, `free`,
