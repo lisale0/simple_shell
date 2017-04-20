@@ -6,7 +6,7 @@ In terms of functionality, it mirrors `sh` in a limited scope.
 This version of the shell has a collection of custom built-in commands along
 with the functionality of running scripts in the the various paths on a given operating system.
 ### Environment
-Our Shell has been tested on Ubuntu 14.05.5 LTS
+Our Shell has been tested on Ubuntu 14.05.5 LTS.
 Tests done in VirtualBox on [Ubuntu](https://atlas.hashicorp.com/ubuntu/boxes/trusty64) via [Vagrant](https://www.vagrantup.com/)(1.9.1)
 
 ## Repo Contents
