@@ -113,7 +113,7 @@ man ./man_1_simple_shell
 This shell does not handle comments, logical operators, alias, and variables.
 
 ## Known Bugs
-Currently cannot the first environment variable with unsetenv.
+Currently cannot remove the first environment variable with unsetenv.
 
 ### Authors
 *Lisa Leung* - [Github](https://github.com/lisale0) || [Twitter](https://twitter.com/lisale01) || [email](lisa.leung@holbertonschool.com)
