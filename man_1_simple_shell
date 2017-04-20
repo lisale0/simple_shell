@@ -14,8 +14,10 @@ interprets them, and generally executes other commands. Commands can be typed
 directly to the running shell or can be put into a file and teh file can be
 executed directly by the shell.
 .SH Invocation
-Interactive vs Non-interactive mode
-
+Typically the shell will be run in interactive mode where input is accepted from
+the keyboard.In non-interactive mode, the shell is run from a script or
+something similar.This subshell only opens when the script is executed and
+subsequently closes once the script is finished.
 .SH BUILT-IN COMMANDS
 .RS information on built-in commands
 .PP
@@ -30,16 +32,80 @@ Interactive vs Non-interactive mode
 .PP
 .B unsetenv
 - deletes the variable name from the environment
+.SH Builtins
+.IP cd
+The cd command changes directory if a - (dash) is input as an argument, it is
+replaced byOLDPWD. The command with the dash will print out the name of the
+directory that it switched to based on the variable. If there is no argument, it
+is replaced by HOME.
+.IP echo
+Arguments are printed on the standard output.
 .PP
-.B cd
-- changes directory
-.PP
-.B exit
-- exit the shell, returning a status
+.IP exit
+Shell process is terminated, the return value of the subsequent command
+is used as the exit status.
+.IP pwd
+Remembers the current directory and prints it out.
+.IP printf
+Formats and prints arguments.
+.SH Command Exit Status
+A command exits with zero for success, any other value indicates failure
+or error.
+.SH Pipelines
+A pipeline is a sequence of commands separated by the | operator. The standard
+ouput of every command except the last is linked to the standard input of the
+next command. For the last command, the standard ouput is taken from the shell.
+.SH Special Parameters
+.IP *
+Expands to the positional parameters, beginning with one.
+.IP @
+Expands to the positional
+.IP #
+Expands to the number of positional parameters.
+.IP ?
+Expands to the exit status of the most recent pipeline.
+.IP - (Hyphen.)
+Expands to the current option flags as specified on invocation, by the set
+builtin command, or implicitly by the shell.
+.IP $
+Expands to the process ID of the invoked shell. A subshell retains the same
+vlaue of $ as its parent.
+.IP !
+Expands to the process ID of the most recent background command executed from
+the current shell. For a pipeline, the process ID is that of the last command in
+the pipeline.
+.IP 0 (Zero.)
+Expand to the name of the shell or shell script.
+.SH ENVIRONMENT
+.IP HOME
+Automatically set from the user's login direcotyr. Default argument for the
+cd builtin.
+.IP PATH
+Default search for executables.
+.IP CDPATH
+Search path for cd builtin.
+.IP PS1
+Prompt prompt string: the default is "$ ".
+.IP PS2
+Secondary prompt string: the default is "> ".
+.IP IFS
+Input Field Separators: <space>, <tab>, and <newline>.
+.IP TERM
+Default terminal setting for the shell -- utilized in history editing modes.
+.IP HISTSIZE
+Number of lines in the history buffer.
+.IP PWD
+The value of the current working directory that is set by cd.
+.IP OLDPWD
+Previous value of the current working directory that is set by cd.
+.IP PPID
+Proces ID of the parent process of the shell.
 .SH SEE ALSO
 bash(1), sh(1)
 .SH BUGS
 No known bugs.
+.SH Features to Add
+.SS Aliases
 .SH AUTHOR
 Joe McDaniel <joseph.mcdaniel@holbertonschool.com>
 .PP
