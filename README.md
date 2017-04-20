@@ -1,15 +1,14 @@
-# simple_shell
+# Shell
 ### Description
 This project is a recreation of the command-line interpreter (shell).
 In terms of functionality, it mirrors `sh` in a limited scope.
 ### Synopsis
-This version of the shell has a collection of custom built-in comannds along
-with the functionality of running scripts in the `/bin` folder.
+This version of the shell has a collection of custom built-in commands along
+with the functionality of running scripts in the the various paths on a given operating system.
 ### Environment
-This program was designed to be compiled with `gcc 4.84` and run in
-Ubuntu 14.04 LTS
+Our Shell has been tested on Ubuntu 14.05.5 LTS
+Tests done in VirtualBox on [Ubuntu](https://atlas.hashicorp.com/ubuntu/boxes/trusty64) via [Vagrant](https://www.vagrantup.com/)(1.9.1)
 
-Tests done in VirtualBox on Ubuntu via Vagrant
 ## Repo Contents
 
 |   **File**    |  **Decription**                       |
@@ -61,7 +60,7 @@ a non-interactive subshell.
 ```
 $ cat non-script
 #!/bin/bash
-echo "cisisfun"
+echo "cisfun"
 
 $ chmod u+x nonscript
 $ ./non-script
@@ -77,16 +76,19 @@ man ./man_1_simple_shell
 * `cd` (change directory)
 * `exit` (exit program)
 * `pwd` (print current working directory)
-
-#### Commands:
-* `ls` (list directory contents)
-* `cat` (concatenate files and print on stdout)
+* `env` (prints environment variables)
+* `setenv` (sets a new environment variable)
+* `unsetenv` (unset a environment variable)
 
 ### Function and System Calls Utilized
- `access`, `chdir`, `close`, `closedir`, `execve`, `exit`, `fork`, `free`,
-`fstat`, `getcwd`, `getline`, `kill`, `lstat`, `malloc`, `open`, `opendir`,
-`perror`, `read`, `readdir`, `signal`, `stat`, `wait`, `waitpid`, `wait3`,
-`wait4`, `write`, `_exit`
+ `access`, `chdir`, `close`, `execve`, `exit`, `fork`, `free`,
+`fstat`, `getcwd`, `getline`, `malloc`,`perror`, `read`,  `wait`
+
+## Notes
+This shell does not handle comments, logical operators, alias, and variables.
+
+## Known Bugs
+Currently cannot the first environment variable with unsetenv.
 
 ### Authors
 *Lisa Leung* - [Github](https://github.com/lisale0) || [Twitter](https://twitter.com/lisale01) || [email](lisa.leung@holbertonschool.com)
