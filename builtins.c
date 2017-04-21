@@ -18,25 +18,37 @@ int exec_cd(__attribute__((unused))env_t **envlist,
 	size_t cwdlen = 0;
 
 	build_cdpaths(envlist, &temp, &temp2, &oldpath, &currentpath, &cwdlen);
-	if (arg[1] == NULL)
+	if (arg[1] == NULL || (_strcmp(arg[1], "$HOME") == 0))
 	{
 		home = _getenv(*envlist, "HOME");
-		chdir(home->value);
+		if (chdir(home->value) != 0)
+		{
+			perror("hsh");
+			free(oldpath);
+			free(currentpath);
+			return (-1);
+		}
+	}
+	else if (_strcmp(arg[1], "-") == 0)
+	{
+		if ((chdir(oldpath)) == 0)
+			set_pathvar(envlist, oldpath, currentpath);
 	}
 	else
 	{
-		if (_strcmp(arg[1], "-") == 0)
+		if (opendir(arg[1]) == NULL)
 		{
-			if ((chdir(oldpath)) == 0)
-			{
-				set_pathvar(envlist, oldpath, currentpath);
-			}
-
+			/**need to closedir**/
+			/**closedir(arg[1]);**/
+			perror("hsh");
 		}
+		if ((chdir(arg[1])) == 0)
+			set_pathvar(envlist, oldpath, currentpath);
 	}
+
 	free(oldpath);
 	free(currentpath);
-	return (1);
+	return (0);
 }
 
 /**
@@ -114,6 +126,9 @@ int exec_unsetenv(env_t **envlist,
 		perror("invalid arg");
 		return (-1);
 	}
-	_unsetenv(envlist, arg[1]);
+	if (_unsetenv(envlist, arg[1]) == -1)
+	{
+		return (-1);
+	}
 	return (0);
 }

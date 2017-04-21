@@ -63,7 +63,7 @@ void set_pathvar(env_t **envlist, char *oldpath,
 	{
 		if (_strcmp(temp->key, "PWD") == 0)
 		{
-			oldlen = _strlen(temp->value) + 1;
+			oldlen = _strlen(temp->value + 1);
 			newlen = _strlen(oldpath) + 1;
 			temp->value = _realloc(temp->value, oldlen, newlen);
 			_strcpy(temp->value, oldpath);
@@ -71,9 +71,10 @@ void set_pathvar(env_t **envlist, char *oldpath,
 		if (_strcmp(temp->key, "OLDPWD") == 0)
 		{
 			oldlen = _strlen(temp->value) + 1;
-			newlen = _strlen(oldpath) + 1;
-			_realloc(temp->value, oldlen, newlen);
+			newlen = _strlen(currentpath) + 1;
+			temp->value = _realloc(temp->value, oldlen, newlen);
 			_strcpy(temp->value, currentpath);
+
 		}
 		temp = temp->next;
 	}

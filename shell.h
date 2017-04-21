@@ -13,7 +13,7 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
-
+#include <dirent.h>
 /**Macros**/
 #define BUFSIZE 1024
 #define TOKSIZE 64
@@ -61,7 +61,7 @@ void set_envlist(env_t **envlist);
 void prompt_user(env_t **envlist, char **patharr, int pipe);
 char **split_line(char *line);
 int execute_cmd(env_t **envlist, char ***arg, char **patharr, int pipe);
-void write_prompt();
+void write_prompt(void);
 /**
  * execute_arg - primary function that calls execve
  * @envlist: the linked list used to grab values

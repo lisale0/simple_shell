@@ -1,4 +1,4 @@
-.TH simple_shell "17 April 2017" "0.1" "simple_shell man page"
+.TH simple_shell "1" "17 April 2017" "Simple Shell Man Page"  "simple_shell man page"
 .SH NAME
 .B simple_shell - command-line interpreter
 .SH SYNOPSIS

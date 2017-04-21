@@ -77,7 +77,10 @@ int _unsetenv(env_t **envlist, char *name)
 	env_t *deleteNode, *temp;
 
 	if (*envlist == NULL)
+	{
+		perror("hsh");
 		return (-1);
+	}
 	temp = *envlist;
 	while (temp != NULL)
 	{
