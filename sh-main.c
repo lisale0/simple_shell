@@ -100,7 +100,7 @@ char **split_line(char *line)
 		if (i >= size)
 		{
 			oldsize = size;
-			size += BUFSIZE;
+			size += TOKSIZE;
 			tokens = _realloc(tokens, oldsize, sizeof(char *) * size);
 			if (tokens == NULL)
 			{
