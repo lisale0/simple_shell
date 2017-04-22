@@ -17,17 +17,17 @@ int main(void)
 	{
 		add_nodeenv_end(&envlist, *ep);
 	}
-        if (fstat(STDIN_FILENO, &sb) == -1)
-        {
-                perror("stat");
-                exit(EXIT_FAILURE);
-        }
-        switch (sb.st_mode & S_IFMT)
-        {
-        case S_IFIFO:
-                pipe = 1;
-                break;
-        }
+	if (fstat(STDIN_FILENO, &sb) == -1)
+	{
+		perror("stat");
+		exit(EXIT_FAILURE);
+	}
+	switch (sb.st_mode & S_IFMT)
+	{
+	case S_IFIFO:
+		pipe = 1;
+		break;
+	}
 	patharr = parse_path(envlist);
 	prompt_user(&envlist, patharr, pipe);
 	free_dblechar(patharr);

@@ -5,7 +5,7 @@
  *
  * Return: none, void
  */
-void write_prompt()
+void write_prompt(void)
 {
 	write(1, PS1, 2);
 }
