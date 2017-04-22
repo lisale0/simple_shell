@@ -39,6 +39,7 @@ int main(void)
  * prompt_user - prompts the user for command or pipe in commands to file
  * @envlist: linkedlist of environment vars
  * @patharr: an array of path tokenized
+ * @pipe: determine whether it is interactive or not
  *
  * Return: none
  */
@@ -52,6 +53,7 @@ void prompt_user(env_t **envlist, char **patharr, int pipe)
 
 	if (pipe == 0)
 		write_prompt();
+	signal(SIGINT, intHandler);
 	while ((retval = getline(&line, &n, stdin)) != -1)
 	{
 		if (check_space(line[0]) == SUCCESS)
@@ -145,4 +147,15 @@ int execute_arg(__attribute__((unused))env_t **envlist, char **arg, char *path)
 	else
 		wait(&status);
 	return (1);
+}
+
+/**
+ * intHandler - handles signal
+ * @sig: the signal
+ * Return: none, void
+ */
+void intHandler(__attribute__((unused))int sig)
+{
+	write(1, "\n", 1);
+	write_prompt();
 }

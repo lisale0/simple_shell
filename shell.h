@@ -145,4 +145,5 @@ void set_homepath(env_t **envlist, char *oldpath);
  */
 int build_cdpaths(env_t **envlist, env_t **temp, env_t **temp2,
 		  char **oldpath, char **currentpath, size_t *cwdlen);
+void intHandler(int sig);
 #endif
