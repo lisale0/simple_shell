@@ -52,7 +52,6 @@ total 108
 -rwxr-xr-x 1 vagrant vagrant  3225 Apr 19 22:28 helper_func.c
 -rwxr-xr-x 1 vagrant vagrant 31912 Apr 19 22:24 hsh
 -rwxr--r-- 1 vagrant vagrant     6 Apr 20 04:13 ls
--rwxr--r-- 1 vagrant vagrant    18 Apr 20 04:12 ls~
 -rw-r--r-- 1 vagrant vagrant  3648 Apr 20 03:36 man_1_simple_shell
 -rwxr-xr-x 1 vagrant vagrant  1594 Apr 19 18:26 path.c
 -rwxr-xr-x 1 vagrant vagrant  2210 Apr 19 22:30 prompt_hlp.c
